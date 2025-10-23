@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -22,7 +23,7 @@ import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.Marvelous
 import com.example.rosapastelapp.ui.theme.NewYorkPink
-import kotlin.OptIn // <-- Importación necesaria para @OptIn
+import kotlin.OptIn
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,25 +38,32 @@ fun HomeScreen() {
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween, // Mejor para distribuir los elementos verticalmente
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // botón para omitir inicio de sesión/ registro
-            Button(
-                onClick = { /* acción futura */ },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Cordovan
-                ),
-                border = BorderStroke(2.dp, NewYorkPink)
+            Box(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Omitir")
+                // botón para omitir inicio de sesión/ registro
+                Button(
+                    onClick = { /* acción futura */ },
+                    modifier = Modifier.align(Alignment.Center),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Black
+                    ),
+                    border = BorderStroke(2.dp, NewYorkPink)
+                ) {
+                    Text(
+                        "Omitir",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
             }
 
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp), // Espacio entre los botones
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -77,7 +85,10 @@ fun HomeScreen() {
                     ),
                     border = BorderStroke(2.dp, NewYorkPink)
                 ) {
-                    Text("Registrarme")
+                    Text(
+                        "Registrarme",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
 
                 // Botón para iniciar sesión
@@ -86,11 +97,14 @@ fun HomeScreen() {
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
-                        contentColor = Cordovan
+                        contentColor = Color.Black
                     ),
                     border = BorderStroke(2.dp, NewYorkPink)
                 ) {
-                    Text("Iniciar Sesión")
+                    Text(
+                        "Iniciar Sesión",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
             }
 
@@ -98,7 +112,9 @@ fun HomeScreen() {
             Text(
                 text = "© 2025 Rosa Pastel. Todos los derechos reservados.",
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
+                color = Cordovan,
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }
