@@ -5,16 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
-import com.example.rosapastelapp.ui.InicioSesion
+import com.example.rosapastelapp.ui.PerfilEditar
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             RosaPastelAppTheme {
-                InicioSesion()
+                PerfilEditar()
             }
-
         }
     }
 }
