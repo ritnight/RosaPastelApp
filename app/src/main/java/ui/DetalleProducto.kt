@@ -22,9 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R // Asegúrate de tener las imágenes y colores
-import com.example.rosapastelapp.ui.theme.NewYorkPink // Reutilizando un color de tu código
-
-/**
+import com.example.rosapastelapp.ui.theme.NewYorkPink/**
  * Composable que representa la pantalla de detalle de un producto.
  */
 @Composable
@@ -33,7 +31,7 @@ fun ProductDetailScreen() {
     var quantity by remember { mutableIntStateOf(1) }
     // Estado para el color seleccionado (usamos el color vino tinto por defecto)
     var selectedColor by remember { mutableStateOf(Color(0xFF8B002B)) } // Vino tinto (Cordovan similar)
-
+    val NewYorkPink = Color(0xFFd87e8b)
     Scaffold(
         bottomBar = { ProductBottomBar() }
     ) { innerPadding ->
@@ -44,7 +42,7 @@ fun ProductDetailScreen() {
         ) {
             // Sección superior de Imagen y Controles
             ProductImageAndControls(
-                productImageRes = R.drawproduct_image, // Reemplaza con tu imagen de producto
+                productImageRes = R.drawable.tinta_essence, // Reemplaza con tu imagen de producto
                 onBackClicked = { /* Lógica de navegación hacia atrás */ }
             )
 
@@ -158,7 +156,6 @@ fun ProductImageAndControls(
         Icon(
             imageVector = Icons.Filled.FavoriteBorder,
             contentDescription = "Favorite",
-            tint = NewYorkPink,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(32.dp)
@@ -291,7 +288,6 @@ fun ProductBottomBar() {
         Icon(
             painter = painterResource(id = R.drawable.ic_home), // Reemplaza con tu icono
             contentDescription = "Home",
-            tint = NewYorkPink,
             modifier = Modifier.size(30.dp).clickable { /* Nav Home */ }
         )
         // Icono Perfil
@@ -305,7 +301,6 @@ fun ProductBottomBar() {
         Icon(
             painter = painterResource(id = R.drawable.ic_corazon), // Reemplaza con tu icono
             contentDescription = "Favorites",
-            tint = NewYorkPink,
             modifier = Modifier.size(30.dp).clickable { /* Nav Favorites */ }
         )
     }
