@@ -16,6 +16,7 @@ class MainActivity : ComponentActivity() {
                 // Aquí se llama a la función Composable de tu pantalla principal.
                 HomeScreen()
             }
+
         }
     }
 }
