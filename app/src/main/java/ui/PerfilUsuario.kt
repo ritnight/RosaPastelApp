@@ -1,4 +1,4 @@
-package ui
+package com.example.rosapastelapp.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,16 +8,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.PersonOutline
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -37,13 +35,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
-import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
+import com.example.rosapastelapp.ui.theme.*
 
-// --- DEFINE TUS COLORES ---
-val RosaPastel = Color(0xFFE5A6B6)
-val RosaFondoNav = Color(0xFFFBEFF2)
-val GrisClaroIcono = Color(0xFFEBEBEB)
+private val RosaFondoNav = BabyPink
+private val GrisClaroIcono = Color(0xFFEBEBEB)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilUsuario() {
 
@@ -67,9 +64,9 @@ fun PerfilUsuario() {
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- 1. Información de Usuario ---
+            // info usuario
             Image(
-                painter = painterResource(id = R.drawable.profile_pic_lara),
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Foto de perfil",
                 modifier = Modifier
                     .size(100.dp)
@@ -80,7 +77,8 @@ fun PerfilUsuario() {
             Text(
                 text = "Lara Jean",
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Cordovan
             )
             Text(
                 text = "larajean@gmail.com",
@@ -90,7 +88,7 @@ fun PerfilUsuario() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- 2. Botón Editar Perfil ---
+            // ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -100,11 +98,11 @@ fun PerfilUsuario() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Default.Edit,
+                    imageVector = Icons.Filled.Edit,
                     contentDescription = "Editar",
                     modifier = Modifier
                         .size(40.dp)
-                        .background(RosaPastel, CircleShape)
+                        .background(NewYorkPink, CircleShape)
                         .padding(8.dp),
                     tint = Color.White
                 )
@@ -112,10 +110,11 @@ fun PerfilUsuario() {
                 Text(
                     text = "Editar perfil",
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    color = Cordovan
                 )
                 Icon(
-                    imageVector = Icons.Default.ArrowForwardIos,
+                    imageVector = Icons.Filled.ArrowForward,
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
                     tint = Color.Gray
@@ -124,16 +123,17 @@ fun PerfilUsuario() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- 3. Mensaje de Bienvenida ---
+            // msj bienvenida
             Text(
                 text = "¡Bienvenid@, Lara Jean!",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Cordovan
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- 4. Sección de Configuraciones ---
+            // configuraciones
             Text(
                 text = "Configuraciones",
                 style = MaterialTheme.typography.titleMedium,
@@ -141,40 +141,42 @@ fun PerfilUsuario() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp),
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
+                color = Cordovan
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            SettingsItem(icon = Icons.Default.Settings, text = "General")
-            SettingsItem(icon = Icons.Default.Language, text = "Idioma")
-            SettingsItem(icon = Icons.Default.HelpOutline, text = "Sobre nosotros")
-            SettingsItem(icon = Icons.Default.Info, text = "Términos y Condiciones")
-            SettingsItem(icon = Icons.Default.Lock, text = "Política de Privacidad")
+            SettingsItem(icon = Icons.Filled.Settings, text = "General")
+            SettingsItem(icon = Icons.Filled.Info, text = "Idioma")
+            SettingsItem(icon = Icons.Filled.Info , text = "Sobre nosotros")
+            SettingsItem(icon = Icons.Filled.Info, text = "Términos y Condiciones")
+            SettingsItem(icon = Icons.Filled.Lock, text = "Política de Privacidad")
 
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
 
-// --- BARRA SUPERIOR (TOP BAR) ---
+// barra superior
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBarPerfil() {
     CenterAlignedTopAppBar(
         title = {
-            Text("Perfil", fontWeight = FontWeight.Bold)
+            Text("Perfil", fontWeight = FontWeight.Bold, color = Cordovan)
         },
         navigationIcon = {
             IconButton(onClick = { /* Acción de volver */ }) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBackIosNew,
-                    contentDescription = "Volver"
+                    imageVector = Icons.Filled.ArrowBack, // <-- CORREGIDO
+                    contentDescription = "Volver",
+                    tint = Cordovan
                 )
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = Color.Transparent
         )
     )
 }
@@ -202,16 +204,17 @@ private fun SettingsItem(
                 .size(40.dp)
                 .background(GrisClaroIcono, CircleShape)
                 .padding(8.dp),
-            tint = Color.DarkGray
+            tint = Cordovan
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            color = Cordovan
         )
         Icon(
-            imageVector = Icons.Default.ArrowForwardIos,
+            imageVector = Icons.Filled.ArrowForward ,
             contentDescription = null,
             modifier = Modifier.size(16.dp),
             tint = Color.Gray
@@ -219,8 +222,7 @@ private fun SettingsItem(
     }
 }
 
-
-// --- BARRA DE NAVEGACIÓN INFERIOR (Copiada de PantallaPrincipal.kt) ---
+// barra inferior
 
 @Composable
 private fun BottomNavBarPrincipal(
@@ -229,7 +231,7 @@ private fun BottomNavBarPrincipal(
 ) {
     NavigationBar(
         containerColor = RosaFondoNav,
-        tonalElevation = 4.dp
+        tonalElevation = 0.dp
     ) {
         // --- Ítem Home ---
         NavigationBarItem(
@@ -237,13 +239,13 @@ private fun BottomNavBarPrincipal(
             onClick = { onItemSelected("Home") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Home,
+                    imageVector = Icons.Filled.Home,
                     contentDescription = "Inicio",
                     modifier = Modifier.size(if (itemSeleccionado == "Home") 36.dp else 28.dp)
                 )
             },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = RosaPastel,
+                selectedIconColor = NewYorkPink,
                 unselectedIconColor = Color.Gray,
                 indicatorColor = Color.Transparent
             )
@@ -254,13 +256,13 @@ private fun BottomNavBarPrincipal(
             onClick = { onItemSelected("Profile") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.PersonOutline,
+                    imageVector = Icons.Filled.Person,
                     contentDescription = "Perfil",
                     modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
                 )
             },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = RosaPastel,
+                selectedIconColor = NewYorkPink,
                 unselectedIconColor = Color.Gray,
                 indicatorColor = Color.Transparent
             )
@@ -271,13 +273,13 @@ private fun BottomNavBarPrincipal(
             onClick = { onItemSelected("Favorites") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
+                    imageVector = Icons.Filled.FavoriteBorder,
                     contentDescription = "Favoritos",
                     modifier = Modifier.size(if (itemSeleccionado == "Favorites") 36.dp else 28.dp)
                 )
             },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = RosaPastel,
+                selectedIconColor = NewYorkPink,
                 unselectedIconColor = Color.Gray,
                 indicatorColor = Color.Transparent
             )
@@ -286,9 +288,7 @@ private fun BottomNavBarPrincipal(
 }
 
 
-// --- PREVIEW ---
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PerfilUsuarioPreview() {
     RosaPastelAppTheme {
