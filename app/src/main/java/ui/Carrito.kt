@@ -38,10 +38,10 @@ data class CartProduct(
 // --- Lista de Productos de Prueba ---
 // (Esto debería venir de tu ViewModel o repositorio)
 val dummyCartList = listOf(
-    CartProduct(1, "Corrector True SKIN HIGH COVER", "¡No hay nada más multifacético...", "$5.990", R.drawable.product_corrector),
-    CartProduct(2, "Tinte Para Labios Y Mejillas What A Tint!", "Este tinte de labios y mejillas...", "$4.990", R.drawable.product_tint),
-    CartProduct(3, "Iluminador More Than Glow", "La textura sedosa, ultra suave...", "$5.990", R.drawable.product_iluminador),
-    CartProduct(4, "Ampolla Calmante Centella 100Ml", "SKIN1004 utiliza el poder...", "$29.990", R.drawable.product_ampolla)
+    CartProduct(1, "Corrector True SKIN HIGH COVER", "¡No hay nada más multifacético...", "$5.990", R.drawable.corrector),
+    CartProduct(2, "Tinte Para Labios Y Mejillas What A Tint!", "Este tinte de labios y mejillas...", "$4.990", R.drawable.tinta_essence),
+    CartProduct(3, "Iluminador More Than Glow", "La textura sedosa, ultra suave...", "$5.990", R.drawable.iluminador),
+    CartProduct(4, "Ampolla Calmante Centella 100Ml", "SKIN1004 utiliza el poder...", "$29.990", R.drawable.ampolla)
 )
 
 // --- Pantalla Principal del Carrito ---
@@ -142,4 +142,6 @@ fun QuantitySelectorCart() {
             .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("1", style = MaterialTheme.typography.
+        Text("1", style = MaterialTheme.typography.bodyLarge)
+      }
+     }
