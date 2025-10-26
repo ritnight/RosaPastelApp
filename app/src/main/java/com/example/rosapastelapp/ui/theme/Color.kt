@@ -15,3 +15,5 @@ val NewYorkPink = Color(0xFFd87e8b)
 val BabyPink = Color(0xFFe2beba)
 val Cordovan = Color(0xFF8c3f49)
 val BlackBean = Color(0xFF360b0c)
+
+val FondoGrisClaro = Color(0xFFF5F5F5)
