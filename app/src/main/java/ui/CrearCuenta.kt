@@ -23,10 +23,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
+import com.example.rosapastelapp.ui.theme.FondoGrisClaro
+import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
-
-val RosaPastel = Color(0xFFE5A6B6)
-val GrisClaroCampo = Color(0xFFF0F0F0)
 
 @Composable
 fun CrearCuenta() {
@@ -80,9 +79,9 @@ fun CrearCuenta() {
             placeholder = { Text("Ingresa tu nombre", style = MaterialTheme.typography.bodyMedium) },
             singleLine = true,
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = GrisClaroCampo,
-                unfocusedContainerColor = GrisClaroCampo,
-                disabledContainerColor = GrisClaroCampo,
+                focusedContainerColor = FondoGrisClaro,
+                unfocusedContainerColor = FondoGrisClaro,
+                disabledContainerColor = FondoGrisClaro,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
@@ -106,9 +105,9 @@ fun CrearCuenta() {
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = GrisClaroCampo,
-                unfocusedContainerColor = GrisClaroCampo,
-                disabledContainerColor = GrisClaroCampo,
+                focusedContainerColor = FondoGrisClaro,
+                unfocusedContainerColor = FondoGrisClaro,
+                disabledContainerColor = FondoGrisClaro,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
@@ -131,9 +130,9 @@ fun CrearCuenta() {
             placeholder = { Text("Ingresa tu dirección", style = MaterialTheme.typography.bodyMedium) },
             singleLine = true,
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = GrisClaroCampo,
-                unfocusedContainerColor = GrisClaroCampo,
-                disabledContainerColor = GrisClaroCampo,
+                focusedContainerColor = FondoGrisClaro,
+                unfocusedContainerColor = FondoGrisClaro,
+                disabledContainerColor = FondoGrisClaro,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
@@ -158,9 +157,9 @@ fun CrearCuenta() {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = GrisClaroCampo,
-                unfocusedContainerColor = GrisClaroCampo,
-                disabledContainerColor = GrisClaroCampo,
+                focusedContainerColor = FondoGrisClaro,
+                unfocusedContainerColor = FondoGrisClaro,
+                disabledContainerColor = FondoGrisClaro,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
@@ -185,9 +184,9 @@ fun CrearCuenta() {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = GrisClaroCampo,
-                unfocusedContainerColor = GrisClaroCampo,
-                disabledContainerColor = GrisClaroCampo,
+                focusedContainerColor = FondoGrisClaro,
+                unfocusedContainerColor = FondoGrisClaro,
+                disabledContainerColor = FondoGrisClaro,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
@@ -207,7 +206,8 @@ fun CrearCuenta() {
                 .height(50.dp),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = RosaPastel
+                containerColor = NewYorkPink,
+                contentColor = Color.White
             )
         ) {
             Text(
