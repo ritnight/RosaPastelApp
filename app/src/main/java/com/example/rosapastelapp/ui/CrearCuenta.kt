@@ -1,4 +1,4 @@
-package com.example.rosapastelapp.ui
+/*package com.example.rosapastelapp.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -215,3 +215,4 @@ private fun CampoFormulario(
         }
     }
 }
+*/

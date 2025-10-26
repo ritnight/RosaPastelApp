@@ -11,9 +11,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -204,11 +204,11 @@ private fun ContenidoBelleza() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.mockup-visual),
+            painter = painterResource(id = R.drawable.descuentos),
             contentDescription = "Banner Descuentos",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp),
+                .height(300.dp),
             contentScale = ContentScale.Crop
         )
 
@@ -254,19 +254,19 @@ private fun ContenidoBelleza() {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ProductoItem(
-                imagenId = R.drawable.producto_gloss,
+                imagenId = R.drawable.kiko_milano_gloss,
                 marca = "KIKO MILANO",
                 nombre = "3D Hydra Gloss",
                 precio = "$15.990"
             )
             ProductoItem(
-                imagenId = R.drawable.producto_delineador,
+                imagenId = R.drawable.nyx_epic_ink,
                 marca = "Nyx Cosmetics",
                 nombre = "Delineador de Ojos",
                 precio = "$9.950"
             )
             ProductoItem(
-                imagenId = R.drawable.producto_tint,
+                imagenId = R.drawable.tinta_essence,
                 marca = "Maybelline",
                 nombre = "Super Stay Teddy Tint",
                 precio = "$10.990"
@@ -345,7 +345,7 @@ private fun BottomNavBarPrincipal(
             onClick = { onItemSelected("Profile") },
             icon = {
                 Icon(
-                    imageVector = Icons.Outlined.PersonOutline,
+                    imageVector = Icons.Outlined.Person ,
                     contentDescription = "Perfil",
                     modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
                 )
