@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -51,7 +53,7 @@ fun AddressSelectionScreen() {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_location_pin), // Reemplaza con tu icono
+                imageVector = Icons.Default.LocationOn,
                 contentDescription = "Ubicación",
                 tint = NewYorkPink, // Usando tu color rosa
                 modifier = Modifier.size(40.dp)
