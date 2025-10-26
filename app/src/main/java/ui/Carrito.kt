@@ -6,12 +6,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,11 +31,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
-import com.example.rosapastelapp.ui.theme.Cordovan // Importa tu color Cordovan
-import com.example.rosapastelapp.ui.theme.NewYorkPink // Importa tu color NewYorkPink
+import com.example.rosapastelapp.ui.theme.Cordovan
+import com.example.rosapastelapp.ui.theme.NewYorkPink
+import com.example.rosapastelapp.ui.theme.BabyPink
+import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 
-// --- Data Class para el Producto ---
-// (Define esto en un archivo separado, por ejemplo, model/Product.kt)
+// --- Data Class y Lista de Productos ---
 data class CartProduct(
     val id: Int,
     val name: String,
@@ -35,8 +45,6 @@ data class CartProduct(
     val imageRes: Int
 )
 
-// --- Lista de Productos de Prueba ---
-// (Esto debería venir de tu ViewModel o repositorio)
 val dummyCartList = listOf(
     CartProduct(1, "Corrector True SKIN HIGH COVER", "¡No hay nada más multifacético...", "$5.990", R.drawable.corrector),
     CartProduct(2, "Tinte Para Labios Y Mejillas What A Tint!", "Este tinte de labios y mejillas...", "$4.990", R.drawable.tinta_essence),
@@ -44,13 +52,144 @@ val dummyCartList = listOf(
     CartProduct(4, "Ampolla Calmante Centella 100Ml", "SKIN1004 utiliza el poder...", "$29.990", R.drawable.ampolla)
 )
 
+
+// BARRA SUPERIOR (TOP BAR)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CartTopBar() {
+    CenterAlignedTopAppBar(
+        title = {
+            Text("Carrito de Compras", fontWeight = FontWeight.Bold, color = Cordovan)
+        },
+        navigationIcon = {
+            IconButton(onClick = { /* Acción de volver */ }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = Cordovan
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent
+        )
+    )
+}
+
+
+// BARRA INFERIOR (CHECKOUT
+@Composable
+fun CartCheckoutBar(total: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column {
+            Text("Total:", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+            Text(total, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = Cordovan)
+        }
+
+        Button(
+            onClick = { /* Acción de Checkout */ },
+            modifier = Modifier.height(50.dp).weight(1f).padding(start = 16.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = NewYorkPink)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.ShoppingCart, contentDescription = "Pagar", modifier = Modifier.size(20.dp).padding(end = 4.dp))
+                Text("Pagar Ahora", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold))
+            }
+        }
+    }
+}
+
+
+// BARRA DE NAVEGACIÓN INFERIOR (COMPARTIDA)
+
+@Composable
+private fun BottomNavBarPrincipal(
+    itemSeleccionado: String,
+    onItemSelected: (String) -> Unit
+) {
+    NavigationBar(
+        containerColor = BabyPink,
+        tonalElevation = 0.dp
+    ) {
+        NavigationBarItem(
+            selected = itemSeleccionado == "Home",
+            onClick = { onItemSelected("Home") },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Inicio",
+                    modifier = Modifier.size(if (itemSeleccionado == "Home") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
+        )
+        NavigationBarItem(
+            selected = itemSeleccionado == "Profile",
+            onClick = { onItemSelected("Profile") },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Person ,
+                    contentDescription = "Perfil",
+                    modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
+        )
+        NavigationBarItem(
+            selected = itemSeleccionado == "Favorites",
+            onClick = { onItemSelected("Favorites") },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.FavoriteBorder,
+                    contentDescription = "Favoritos",
+                    modifier = Modifier.size(if (itemSeleccionado == "Favorites") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
+        )
+    }
+}
+
+
 // --- Pantalla Principal del Carrito ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen() {
+    // Variable de estado para el Bottom Bar
+    var itemNavSeleccionado by remember { mutableStateOf("Cart") } // Asumimos un estado 'Cart'
+
     Scaffold(
         topBar = { CartTopBar() },
-        bottomBar = { CartCheckoutBar(total = "$46.870") }
+        bottomBar = {
+            // COMIENZA BOTTOM BAR
+            Column {
+                CartCheckoutBar(total = "$46.870")
+                BottomNavBarPrincipal(
+                    itemSeleccionado = itemNavSeleccionado,
+                    onItemSelected = { itemNavSeleccionado = it }
+                )
+            }
+        }
     ) { innerPadding ->
 
         // Columna perezosa (LazyColumn) para la lista de productos
@@ -59,7 +198,7 @@ fun CartScreen() {
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp), // Espacio entre items
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(vertical = 16.dp)
         ) {
             items(dummyCartList) { product ->
@@ -69,8 +208,8 @@ fun CartScreen() {
     }
 }
 
-// --- Componentes del Carrito ---
 
+// --- Componentes Individuales ---
 @Composable
 fun CartItem(product: CartProduct) {
     Row(
@@ -101,7 +240,7 @@ fun CartItem(product: CartProduct) {
                 .weight(0.5f)
                 .padding(horizontal = 8.dp)
         ) {
-            Text(product.name, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold), fontSize = 15.sp)
+            Text(product.name, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold), fontSize = 15.sp, color = Cordovan)
             Spacer(modifier = Modifier.height(4.dp))
             Text(product.description, style = MaterialTheme.typography.bodySmall, color = Color.Gray, fontSize = 13.sp)
         }
@@ -109,8 +248,8 @@ fun CartItem(product: CartProduct) {
         // Columna 3: Eliminar y Precio
         Column(
             horizontalAlignment = Alignment.End,
+            modifier = Modifier.weight(0.25f).height(80.dp),
             verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.weight(0.25f)
         ) {
             // Botón Eliminar
             Row(
@@ -118,30 +257,44 @@ fun CartItem(product: CartProduct) {
                 modifier = Modifier.clickable { /* Lógica Eliminar */ }
             ) {
                 Icon(
-                    imageVector = Icons.Default.DeleteOutline,
+                    imageVector = Icons.Default.Delete ,
                     contentDescription = "Eliminar",
                     modifier = Modifier.size(16.dp),
                     tint = Color.Gray
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 Text("Eliminar", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
             }
 
-            Spacer(modifier = Modifier.height(40.dp)) // Espaciador para empujar el precio hacia abajo
-
-            Text(product.price, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+            // Precio
+            Text(
+                product.price,
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+                color = Cordovan
+            )
         }
     }
+    Divider(color = Color(0xFFF0F0F0), thickness = 1.dp, modifier = Modifier.padding(top = 16.dp))
 }
 
 @Composable
 fun QuantitySelectorCart() {
-    // Simulación del selector de cantidad
     Row(
         modifier = Modifier
-            .background(Color(0xFFF0F0F0), shape = MaterialTheme.shapes.small)
-            .padding(horizontal = 8.dp, vertical = 4.dp),
+            .background(Color(0xFFF0F0F0), shape = RoundedCornerShape(4.dp))
+            .padding(horizontal = 4.dp, vertical = 2.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("1", style = MaterialTheme.typography.bodyLarge)
-      }
-     }
+        Text("1", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 14.sp), color = Cordovan)
+        Icon(Icons.Default.ArrowDropDown, contentDescription = "Cambiar cantidad", modifier = Modifier.size(20.dp), tint = Cordovan)
+    }
+}
+
+// --- PREVIEW ---
+@Preview(showBackground = true)
+@Composable
+fun CartScreenPreview() {
+    RosaPastelAppTheme {
+        CartScreen()
+    }
+}
