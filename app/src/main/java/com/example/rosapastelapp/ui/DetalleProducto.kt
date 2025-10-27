@@ -22,11 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R // Asegúrate de tener las imágenes y colores
-import com.example.rosapastelapp.ui.theme.NewYorkPink/**
+import com.example.rosapastelapp.ui.theme.NewYorkPink
+import com.example.rosapastelapp.viewmodel.MainViewModel
+
+/**
  * Composable que representa la pantalla de detalle de un producto.
  */
 @Composable
-fun ProductDetailScreen() {
+fun ProductDetailScreen(viewModel: MainViewModel) {
     // Estado para la cantidad del producto
     var quantity by remember { mutableIntStateOf(1) }
     // Estado para el color seleccionado (usamos el color vino tinto por defecto)

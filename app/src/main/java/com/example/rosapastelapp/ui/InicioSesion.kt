@@ -32,11 +32,10 @@ import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 
 @Composable
-fun InicioSesion(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
+fun InicioSesion(viewModel: MainViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // Asumiendo que ColorPrimario y FondoGrisClaro están definidos en Color.kt
     val ColorPrimario = NewYorkPink
     val FondoGrisClaro = FondoGrisClaro
     val ColorTexto = Cordovan

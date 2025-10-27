@@ -27,10 +27,11 @@ import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
+import com.example.rosapastelapp.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilEditar() {
+fun PerfilEditar(viewModel: MainViewModel) {
 
     // valores de ejemplo para los campos editables
     val nombre = "Lara Jean"

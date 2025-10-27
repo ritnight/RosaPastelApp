@@ -28,7 +28,7 @@ import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 
 @Composable
-fun CrearCuenta() {
+fun CrearCuenta(viewModel: MainViewModel) {
 
     var nombre by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }

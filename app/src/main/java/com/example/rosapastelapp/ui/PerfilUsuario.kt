@@ -36,12 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.*
+import com.example.rosapastelapp.viewmodel.MainViewModel
 
 private val GrisClaroIcono = Color(0xFFEBEBEB)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilUsuario() {
+fun PerfilUsuario(viewModel: MainViewModel) {
 
     var itemNavSeleccionado by remember { mutableStateOf("Profile") }
 
