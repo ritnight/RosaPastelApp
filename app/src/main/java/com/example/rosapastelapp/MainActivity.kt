@@ -69,18 +69,6 @@ fun AppNavHost(viewModel: MainViewModel = viewModel()) {
             composable(route = Screen.Login.route) {
                 InicioSesion(viewModel = viewModel)
             }
-
-            composable(route = Screen.PantallaPrincipal.route) {
-                PantallaPrincipal(viewModel = viewModel)
-            }
-
-            composable(route = Screen.CrearCuenta.route) {
-                CrearCuenta(viewModel = viewModel)
-            }
-
-            composable(route = Screen.PerfilUsuario.route) {
-                PerfilUsuario(viewModel = viewModel)
-            }
         }
     }
 }

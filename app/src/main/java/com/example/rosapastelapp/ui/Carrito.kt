@@ -36,7 +36,7 @@ import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.BabyPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 
-//  Data Class y Lista de Productos
+// --- Data Class y Lista de Productos ---
 data class CartProduct(
     val id: Int,
     val name: String,
@@ -171,7 +171,7 @@ private fun BottomNavBarPrincipal(
 }
 
 
-// Pantalla Principal del Carrito
+// --- Pantalla Principal del Carrito ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen() {
@@ -209,7 +209,7 @@ fun CartScreen() {
 }
 
 
-// Componentes Individuales
+// --- Componentes Individuales ---
 @Composable
 fun CartItem(product: CartProduct) {
     Row(
@@ -290,7 +290,7 @@ fun QuantitySelectorCart() {
     }
 }
 
-//  PREVIEW
+// --- PREVIEW ---
 @Preview(showBackground = true)
 @Composable
 fun CartScreenPreview() {

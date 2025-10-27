@@ -1,4 +1,4 @@
-package com.example.rosapastelapp.ui
+package com.example.rosapastelapp.ui // Ajusta tu paquete si es necesario
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,16 +21,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.rosapastelapp.R
-import com.example.rosapastelapp.ui.theme.NewYorkPink
-import com.example.rosapastelapp.viewmodel.MainViewModel
-
-
+import com.example.rosapastelapp.R // Asegúrate de tener las imágenes y colores
+import com.example.rosapastelapp.ui.theme.NewYorkPink/**
+ * Composable que representa la pantalla de detalle de un producto.
+ */
 @Composable
-fun ProductDetailScreen(viewModel: MainViewModel) {
+fun ProductDetailScreen() {
     // Estado para la cantidad del producto
     var quantity by remember { mutableIntStateOf(1) }
-    // Estado para el color seleccionado
+    // Estado para el color seleccionado (usamos el color vino tinto por defecto)
     var selectedColor by remember { mutableStateOf(Color(0xFF8B002B)) } // Vino tinto (Cordovan similar)
     val NewYorkPink = Color(0xFFd87e8b)
     Scaffold(
@@ -43,7 +42,7 @@ fun ProductDetailScreen(viewModel: MainViewModel) {
         ) {
             // Sección superior de Imagen y Controles
             ProductImageAndControls(
-                productImageRes = R.drawable.tinta_essence,
+                productImageRes = R.drawable.tinta_essence, // Reemplaza con tu imagen de producto
                 onBackClicked = { /* Lógica de navegación hacia atrás */ }
             )
 
@@ -89,6 +88,8 @@ fun ProductDetailScreen(viewModel: MainViewModel) {
     }
 }
 
+// --- Componentes Reutilizables ---
+
 @Composable
 fun ProductImageAndControls(
     productImageRes: Int,
@@ -97,19 +98,20 @@ fun ProductImageAndControls(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(350.dp)
+            .height(350.dp) // Altura para mostrar ambas partes de la imagen
     ) {
-
+        // La imagen principal del producto (izquierda)
         Image(
             painter = painterResource(id = productImageRes),
             contentDescription = "Lip and Cheek Tint Product",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxWidth(0.55f)
+                .fillMaxWidth(0.55f) // Simula el ancho de la imagen izquierda
                 .align(Alignment.CenterStart)
                 .fillMaxHeight()
         )
 
+        // El aplicador (derecha) - Simplemente un fondo blanco con el texto
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.45f)
@@ -131,12 +133,14 @@ fun ProductImageAndControls(
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
+                    // No hay una forma directa de invertir en Compose,
+                    // esto es una simplificación visual.
                     modifier = Modifier.padding(16.dp)
                 )
             }
         }
 
-        // boton atras
+        // Flecha de retroceso (arriba izquierda)
         IconButton(
             onClick = onBackClicked,
             modifier = Modifier
@@ -148,7 +152,7 @@ fun ProductImageAndControls(
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
         }
 
-        // favoritos
+        // Icono de corazón (favorito) (derecha media)
         Icon(
             imageVector = Icons.Filled.FavoriteBorder,
             contentDescription = "Favorite",
@@ -174,7 +178,7 @@ fun ProductInfoSection(title: String, price: String, brand: String) {
 
         Text(brand, style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
 
-        // Estrellas de Valoración
+        // Estrellas de Valoración (5 Estrellas completas en la imagen)
         Row(modifier = Modifier.padding(vertical = 4.dp)) {
             repeat(5) {
                 Icon(
@@ -197,7 +201,7 @@ fun ProductInfoSection(title: String, price: String, brand: String) {
 
 @Composable
 fun ColorSelector(selectedColor: Color, onColorSelected: (Color) -> Unit) {
-    val colors = listOf(Color(0xFF8B002B), Color(0xFFE91E63))
+    val colors = listOf(Color(0xFF8B002B), Color(0xFFE91E63)) // Vino tinto y Rosa Brillante
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Text("Color", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold))
@@ -212,7 +216,7 @@ fun ColorSelector(selectedColor: Color, onColorSelected: (Color) -> Unit) {
                         .clickable { onColorSelected(color) }
                 ) {
                     if (color == selectedColor) {
-                        // borde de selección para indicar el color elegido
+                        // Borde de selección para indicar el color elegido
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -236,19 +240,19 @@ fun QuantitySelector(quantity: Int, onQuantityChange: (Int) -> Unit) {
         horizontalArrangement = Arrangement.End,
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 16.dp)
     ) {
-        // boton menos cantidad
+        // Botón - (Disminuir)
         OutlinedButton(
             onClick = { if (quantity > 1) onQuantityChange(quantity - 1) },
             modifier = Modifier.size(36.dp),
             contentPadding = PaddingValues(0.dp),
-            border = null
+            border = null // Quitar el borde si es necesario
         ) {
             Text("-", fontSize = 18.sp, color = Color.Black)
         }
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // cantidad Actual
+        // Cantidad Actual
         Text(
             text = quantity.toString(),
             style = MaterialTheme.typography.bodyLarge,
@@ -258,7 +262,7 @@ fun QuantitySelector(quantity: Int, onQuantityChange: (Int) -> Unit) {
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // boton mas cantidad
+        // Botón + (Aumentar)
         OutlinedButton(
             onClick = { onQuantityChange(quantity + 1) },
             modifier = Modifier.size(36.dp),
@@ -272,7 +276,7 @@ fun QuantitySelector(quantity: Int, onQuantityChange: (Int) -> Unit) {
 
 @Composable
 fun ProductBottomBar() {
-    // barra de navegación inferior simple
+    // Barra de navegación inferior simple (Home, Perfil, Favoritos)
     Row(
         modifier = Modifier
             .fillMaxWidth()

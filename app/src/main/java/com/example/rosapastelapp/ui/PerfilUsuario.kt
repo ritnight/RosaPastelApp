@@ -36,13 +36,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.*
-import com.example.rosapastelapp.viewmodel.MainViewModel
 
 private val GrisClaroIcono = Color(0xFFEBEBEB)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilUsuario(viewModel: MainViewModel) {
+fun PerfilUsuario() {
 
     var itemNavSeleccionado by remember { mutableStateOf("Profile") }
 
@@ -181,6 +180,7 @@ private fun TopBarPerfil() {
     )
 }
 
+// --- ITEM REUTILIZABLE PARA LA LISTA DE SETTINGS ---
 
 @Composable
 private fun SettingsItem(
@@ -232,7 +232,7 @@ private fun BottomNavBarPrincipal(
         containerColor = BabyPink,
         tonalElevation = 0.dp
     ) {
-        //home
+        // --- Ítem Home ---
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
             onClick = { onItemSelected("Home") },
@@ -249,7 +249,7 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // perfil
+        // --- Ítem Perfil ---
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
             onClick = { onItemSelected("Profile") },
@@ -266,7 +266,7 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // favoritos
+        // --- Ítem Favoritos ---
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
             onClick = { onItemSelected("Favorites") },

@@ -17,23 +17,23 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.ui.theme.NewYorkPink
-import com.example.rosapastelapp.viewmodel.MainViewModel
 
-
+// --- Data Class para la Dirección ---
+// (Puedes mover esto a tu paquete de 'model')
 data class Address(
     val line1: String,
     val line2: String
 )
 
-// Lista de Direcciones de Prueba
+// --- Lista de Direcciones de Prueba ---
 val dummyAddressList = listOf(
     Address("Avenida SiempreViva, 742", "SPRINGFIELD, REGION METROPOLITANA"),
     Address("Avenida Antonio Varas 666", "Providencia, REGIÓN METROPOLITANA")
 )
 
-// Pantalla Principal de Selección de Dirección
+// --- Pantalla Principal de Selección de Dirección ---
 @Composable
-fun AddressSelectionScreen(viewModel: MainViewModel) {
+fun AddressSelectionScreen() {
 
     // Estado para guardar el índice de la dirección seleccionada
     var selectedAddressIndex by remember { mutableStateOf(0) }
@@ -42,10 +42,10 @@ fun AddressSelectionScreen(viewModel: MainViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(24.dp)
+            .padding(24.dp) // Un padding un poco más grande
     ) {
 
-        // Encabezado
+        // --- Encabezado (Icono + Título) ---
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -53,7 +53,7 @@ fun AddressSelectionScreen(viewModel: MainViewModel) {
             Icon(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = "Ubicación",
-                tint = NewYorkPink,
+                tint = NewYorkPink, // Usando tu color rosa
                 modifier = Modifier.size(40.dp)
             )
             Text(
@@ -65,7 +65,7 @@ fun AddressSelectionScreen(viewModel: MainViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Descripción
+        // --- Descripción ---
         Text(
             text = "Ingresa tu ubicación y te mostraremos los productos disponibles con tiempos y costos de entrega precisos.",
             style = MaterialTheme.typography.bodyMedium,
@@ -74,7 +74,7 @@ fun AddressSelectionScreen(viewModel: MainViewModel) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Título de Sección
+        // --- Título de Sección ---
         Text(
             text = "En mi dirección",
             style = MaterialTheme.typography.titleLarge,
@@ -83,7 +83,7 @@ fun AddressSelectionScreen(viewModel: MainViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Lista de Direcciones
+        // --- Lista de Direcciones ---
         dummyAddressList.forEachIndexed { index, address ->
             AddressCard(
                 address = address,
@@ -95,21 +95,22 @@ fun AddressSelectionScreen(viewModel: MainViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Enlace "Editar direcciones"
+        // --- Enlace "Editar direcciones" ---
         Text(
             text = "Editar direcciones",
             color = NewYorkPink,
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.Bold,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline // Subrayado como en la imagen
             ),
             modifier = Modifier.clickable { /* Lógica para ir a editar direcciones */ }
         )
 
-        // Espaciador
+        // --- Espaciador ---
+        // Este Spacer empujará el botón "Guardar" hacia el fondo
         Spacer(modifier = Modifier.weight(1f))
 
-        // Botón Guardar (al fondo)
+        // --- Botón Guardar (al fondo) ---
         Button(
             onClick = { /* Lógica de guardar dirección seleccionada */ },
             modifier = Modifier
@@ -118,7 +119,7 @@ fun AddressSelectionScreen(viewModel: MainViewModel) {
             colors = ButtonDefaults.buttonColors(
                 containerColor = NewYorkPink
             ),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp) // Bordes redondeados
         ) {
             Text(
                 "Guardar",
@@ -130,6 +131,9 @@ fun AddressSelectionScreen(viewModel: MainViewModel) {
     }
 }
 
+/**
+ * Un Composable reutilizable para mostrar una tarjeta de dirección seleccionable.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddressCard(
@@ -137,13 +141,15 @@ fun AddressCard(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
+    // Usamos OutlinedCard para tener el borde fácilmente
     OutlinedCard(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
+        // El color del borde cambia si está seleccionado
         border = BorderStroke(
             width = 2.dp,
-            color = if (isSelected) NewYorkPink else Color.LightGray
+            color = if (isSelected) NewYorkPink else Color.LightGray // Borde rosa si está activo
         ),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
@@ -168,6 +174,7 @@ fun AddressCard(
 }
 
 
+// --- Preview ---
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AddressSelectionScreenPreview() {

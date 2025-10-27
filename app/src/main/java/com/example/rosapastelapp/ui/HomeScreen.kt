@@ -20,16 +20,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
-import com.example.rosapastelapp.navigation.Screen
+import com.example.rosapastelapp.navigation.Screen // Importa las Rutas
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.Marvelous
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
-import com.example.rosapastelapp.viewmodel.MainViewModel
+import com.example.rosapastelapp.viewmodel.MainViewModel // Importa el ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: MainViewModel) {
+fun HomeScreen(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Rosa Pastel App", color = Cordovan) })
@@ -39,10 +39,11 @@ fun HomeScreen(viewModel: MainViewModel) {
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .padding(horizontal = 32.dp),
+                .padding(horizontal = 32.dp), // Aplicamos padding lateral
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // --- BLOQUE SUPERIOR (OMITIR) ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -50,8 +51,8 @@ fun HomeScreen(viewModel: MainViewModel) {
             ) {
                 // botón para omitir inicio de sesión/ registro
                 Button(
-                    onClick = { /* implementar navegacion homescreen a pantalla principal */ },
-                    modifier = Modifier.align(Alignment.CenterEnd),
+                    onClick = { /* Implementar navegación a Pantalla Principal (Screen.MainScreen) */ },
+                    modifier = Modifier.align(Alignment.CenterEnd), // Alineamos a la derecha
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
                         contentColor = Cordovan
@@ -66,7 +67,7 @@ fun HomeScreen(viewModel: MainViewModel) {
             }
 
 
-            //  BLOQUE CENTRAL (LOGO Y BOTONES)
+            // --- BLOQUE CENTRAL (LOGO Y BOTONES) ---
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,9 +97,9 @@ fun HomeScreen(viewModel: MainViewModel) {
                     )
                 }
 
-                // Botón para iniciar sesión
+                // Botón para iniciar sesión (Navegación de prueba)
                 Button(
-                    onClick = { viewModel.navigateTo(Screen.Login) },
+                    onClick = { viewModel.navigateTo(Screen.Login) }, // <-- NAVEGACIÓN IMPLEMENTADA
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
@@ -113,13 +114,13 @@ fun HomeScreen(viewModel: MainViewModel) {
                 }
             }
 
-            //  BLOQUE INFERIOR (COPYRIGHT)
+            // --- BLOQUE INFERIOR (COPYRIGHT) ---
             Text(
                 text = "© 2025 Rosa Pastel. Todos los derechos reservados.",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 16.dp),
                 color = Cordovan,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall // Usamos small para el copyright
             )
         }
     }
@@ -129,6 +130,7 @@ fun HomeScreen(viewModel: MainViewModel) {
 @Composable
 fun HomeScreenPreview() {
     RosaPastelAppTheme {
+        // Pasa un ViewModel de prueba para el Preview
         HomeScreen(viewModel = MainViewModel())
     }
 }

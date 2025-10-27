@@ -1,3 +1,4 @@
+
 package com.example.rosapastelapp.ui
 
 import androidx.compose.foundation.Image
@@ -33,14 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
-import com.example.rosapastelapp.viewmodel.MainViewModel
 
 val RosaPastelBanner = Color(0xFFE5A6B6)
 val GrisClaroBanner = Color(0xFFF0F0F0)
 val RosaFondoNav = Color(0xFFFBEFF2)
 
 @Composable
-fun PantallaPrincipal(viewModel: MainViewModel) {
+fun PantallaPrincipal() {
     var tabSeleccionada by remember {mutableStateOf(0) }
 
     var itemNavSeleccionado by remember { mutableStateOf("Home") }
@@ -196,7 +196,7 @@ private fun TabsBelleza(tabSeleccionada: Int, onTabSelected: (Int) -> Unit) {
     }
 }
 
-// PESTAÑA \"BELLEZA\" 
+// PESTAÑA \"BELLEZA\"
 @Composable
 private fun ContenidoBelleza() {
     Column(
@@ -379,7 +379,7 @@ private fun BottomNavBarPrincipal(
 @Preview(showBackground = true)
 @Composable
 fun PantallaPrincipalPreview() {
-    RosaPastelAppTheme { 
+    RosaPastelAppTheme {
         PantallaPrincipal()
     }
 }
