@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.*
 
-private val RosaFondoNav = BabyPink
 private val GrisClaroIcono = Color(0xFFEBEBEB)
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -230,7 +229,7 @@ private fun BottomNavBarPrincipal(
     onItemSelected: (String) -> Unit
 ) {
     NavigationBar(
-        containerColor = RosaFondoNav,
+        containerColor = BabyPink,
         tonalElevation = 0.dp
     ) {
         // --- Ítem Home ---

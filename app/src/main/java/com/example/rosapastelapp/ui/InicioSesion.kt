@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.FondoGrisClaro
-import com.example.rosapastelapp.ui.theme.Marvelous
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 
