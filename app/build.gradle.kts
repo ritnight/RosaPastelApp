@@ -56,4 +56,12 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    // 1. NAVEGACIÓN (Guía 10)
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    // 2. VIEWMODEL COMPOSE (Para usar viewModel() en @Composable)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-rc02")
+
+    // 3. COROUTINES (Necesario para SharedFlow en MainViewModel)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
 }

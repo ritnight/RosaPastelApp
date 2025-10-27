@@ -25,15 +25,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
+import com.example.rosapastelapp.viewmodel.MainViewModel // <-- Importa el ViewModel
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.FondoGrisClaro
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 
 @Composable
-fun  InicioSesion() {
+fun InicioSesion(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    // Asumiendo que ColorPrimario y FondoGrisClaro están definidos en Color.kt
+    val ColorPrimario = NewYorkPink
+    val FondoGrisClaro = FondoGrisClaro
+    val ColorTexto = Cordovan
 
     Scaffold(
     ) { innerPadding ->
@@ -86,12 +92,12 @@ fun  InicioSesion() {
                         Text(
                             "Ingresa tu correo electrónico",
                             color = Color.Gray,
-                            fontSize = 13.sp
+                            fontSize = 15.sp // Usamos 15.sp para evitar cortes
                         )
                     },
                     textStyle = MaterialTheme.typography.bodyLarge.copy(
-                        fontSize = 16.sp,
-                        color = Color.Black
+                        fontSize = 15.sp, // Usamos 15.sp
+                        color = ColorTexto
                     ),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(percent = 50),
@@ -99,8 +105,8 @@ fun  InicioSesion() {
                         focusedContainerColor = FondoGrisClaro,
                         unfocusedContainerColor = FondoGrisClaro,
                         unfocusedBorderColor = Color.LightGray,
-                        focusedBorderColor = NewYorkPink,
-                        cursorColor = NewYorkPink
+                        focusedBorderColor = ColorPrimario,
+                        cursorColor = ColorPrimario
                     ),
 
                     singleLine = true,
@@ -121,14 +127,18 @@ fun  InicioSesion() {
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = { Text("Ingresa tu contraseña", color = Color.Gray, fontSize = 13.sp) },
+                    placeholder = { Text("Ingresa tu contraseña", color = Color.Gray, fontSize = 15.sp) },
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        fontSize = 15.sp,
+                        color = ColorTexto
+                    ),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = FondoGrisClaro,
                         unfocusedContainerColor = FondoGrisClaro,
                         unfocusedBorderColor = Color.LightGray,
-                        focusedBorderColor = NewYorkPink,
-                        cursorColor = NewYorkPink
+                        focusedBorderColor = ColorPrimario,
+                        cursorColor = ColorPrimario
                     ),
                     shape = RoundedCornerShape(percent = 50),
                     singleLine = true,
@@ -144,7 +154,7 @@ fun  InicioSesion() {
                         .height(50.dp),
                     shape = RoundedCornerShape(percent = 50),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = NewYorkPink,
+                        containerColor = ColorPrimario,
                         contentColor = Color.White
                     )
                 ) {
@@ -172,10 +182,12 @@ fun  InicioSesion() {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun InicioSesionPreview() {
     RosaPastelAppTheme {
-        InicioSesion()
+        // Pasa un ViewModel de prueba para el Preview
+        InicioSesion(viewModel = MainViewModel())
     }
 }
