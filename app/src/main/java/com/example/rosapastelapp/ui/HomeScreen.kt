@@ -20,16 +20,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
-import com.example.rosapastelapp.navigation.Screen // Importa las Rutas
+import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.Marvelous
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
-import com.example.rosapastelapp.viewmodel.MainViewModel // Importa el ViewModel
+import com.example.rosapastelapp.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
+fun HomeScreen(viewModel: MainViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Rosa Pastel App", color = Cordovan) })
@@ -39,11 +39,10 @@ fun HomeScreen(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .padding(horizontal = 32.dp), // Aplicamos padding lateral
+                .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // --- BLOQUE SUPERIOR (OMITIR) ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -51,8 +50,8 @@ fun HomeScreen(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
             ) {
                 // botón para omitir inicio de sesión/ registro
                 Button(
-                    onClick = { /* Implementar navegación a Pantalla Principal (Screen.MainScreen) */ },
-                    modifier = Modifier.align(Alignment.CenterEnd), // Alineamos a la derecha
+                    onClick = { /* implementar navegacion homescreen a pantalla principal */ },
+                    modifier = Modifier.align(Alignment.CenterEnd),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
                         contentColor = Cordovan
@@ -67,7 +66,7 @@ fun HomeScreen(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
             }
 
 
-            // --- BLOQUE CENTRAL (LOGO Y BOTONES) ---
+            //  BLOQUE CENTRAL (LOGO Y BOTONES)
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,9 +96,9 @@ fun HomeScreen(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
                     )
                 }
 
-                // Botón para iniciar sesión (Navegación de prueba)
+                // Botón para iniciar sesión
                 Button(
-                    onClick = { viewModel.navigateTo(Screen.Login) }, // <-- NAVEGACIÓN IMPLEMENTADA
+                    onClick = { viewModel.navigateTo(Screen.Login) },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
@@ -114,13 +113,13 @@ fun HomeScreen(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
                 }
             }
 
-            // --- BLOQUE INFERIOR (COPYRIGHT) ---
+            //  BLOQUE INFERIOR (COPYRIGHT)
             Text(
                 text = "© 2025 Rosa Pastel. Todos los derechos reservados.",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 16.dp),
                 color = Cordovan,
-                style = MaterialTheme.typography.bodySmall // Usamos small para el copyright
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }
@@ -130,7 +129,6 @@ fun HomeScreen(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
 @Composable
 fun HomeScreenPreview() {
     RosaPastelAppTheme {
-        // Pasa un ViewModel de prueba para el Preview
         HomeScreen(viewModel = MainViewModel())
     }
 }

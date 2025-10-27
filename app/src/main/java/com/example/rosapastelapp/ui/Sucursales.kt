@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.viewmodel.MainViewModel
 
-//  Data Class para la Dirección
+
 data class Address(
     val line1: String,
     val line2: String

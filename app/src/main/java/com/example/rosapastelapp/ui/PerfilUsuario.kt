@@ -181,7 +181,6 @@ private fun TopBarPerfil() {
     )
 }
 
-// --- ITEM REUTILIZABLE PARA LA LISTA DE SETTINGS ---
 
 @Composable
 private fun SettingsItem(
@@ -233,7 +232,7 @@ private fun BottomNavBarPrincipal(
         containerColor = BabyPink,
         tonalElevation = 0.dp
     ) {
-        // --- Ítem Home ---
+        //home
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
             onClick = { onItemSelected("Home") },
@@ -250,7 +249,7 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // --- Ítem Perfil ---
+        // perfil
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
             onClick = { onItemSelected("Profile") },
@@ -267,7 +266,7 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // --- Ítem Favoritos ---
+        // favoritos
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
             onClick = { onItemSelected("Favorites") },
