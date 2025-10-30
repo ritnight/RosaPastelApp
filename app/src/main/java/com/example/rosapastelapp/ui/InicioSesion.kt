@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
+import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.viewmodel.MainViewModel // <-- Importa el ViewModel
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.FondoGrisClaro
@@ -148,7 +149,7 @@ fun InicioSesion(viewModel: MainViewModel) { // <-- ACEPTA EL VIEWMODEL
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Button(onClick = { /* acción futura */ },
+                Button(onClick = { viewModel.navigateTo(Screen.MainScreen) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
