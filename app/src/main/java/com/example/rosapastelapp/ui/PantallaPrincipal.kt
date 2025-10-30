@@ -64,14 +64,14 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            PromoBanner(viewModel = viewModel)
+            PromoBanner()
             TabsBelleza(
                 tabSeleccionada = tabSeleccionada,
                 onTabSelected = { tabSeleccionada = it }
             )
 
             if (tabSeleccionada == 0) {
-                ContenidoBelleza()
+                ContenidoBelleza(viewModel = viewModel)
             } else {
                 Box(
                     modifier = Modifier
@@ -153,7 +153,7 @@ private fun TopBarPrincipal(viewModel: MainViewModel) {
 // BANNER DE PROMOCIÓN
 
 @Composable
-private fun PromoBanner(viewModel: MainViewModel) {
+private fun PromoBanner() {
     Surface(
         color = RosaPastelBanner,
         modifier = Modifier.fillMaxWidth()
@@ -205,7 +205,7 @@ private fun TabsBelleza(tabSeleccionada: Int, onTabSelected: (Int) -> Unit) {
 
 // PESTAÑA \"BELLEZA\"
 @Composable
-private fun ContenidoBelleza() {
+private fun ContenidoBelleza(viewModel: MainViewModel) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -264,19 +264,22 @@ private fun ContenidoBelleza() {
                 imagenId = R.drawable.kiko_milano_gloss,
                 marca = "KIKO MILANO",
                 nombre = "3D Hydra Gloss",
-                precio = "$15.990"
+                precio = "$15.990",
+                viewModel = viewModel
             )
             ProductoItem(
                 imagenId = R.drawable.nyx_epic_ink,
                 marca = "Nyx Cosmetics",
                 nombre = "Delineador de Ojos",
-                precio = "$9.950"
+                precio = "$9.950",
+                viewModel = viewModel
             )
             ProductoItem(
                 imagenId = R.drawable.tinta_essence,
                 marca = "Escensse",
                 nombre = "What A Tint!",
-                precio = "$10.990"
+                precio = "$10.990",
+                viewModel = viewModel
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -288,10 +291,14 @@ private fun ProductoItem(
     imagenId: Int,
     marca: String,
     nombre: String,
-    precio: String
+    precio: String,
+    viewModel: MainViewModel // 4. Aceptar viewModel
 ) {
     Column(
-        modifier = Modifier.width(150.dp)
+        modifier = Modifier
+            .width(150.dp)
+            .clickable { viewModel.navigateTo(Screen.ProductDetail) }
+
     ) {
         Image(
             painter = painterResource(id = imagenId),

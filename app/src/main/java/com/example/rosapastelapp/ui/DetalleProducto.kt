@@ -21,16 +21,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.rosapastelapp.R // Asegúrate de tener las imágenes y colores
-import com.example.rosapastelapp.ui.theme.NewYorkPink/**
- * Composable que representa la pantalla de detalle de un producto.
- */
+import com.example.rosapastelapp.R
+import com.example.rosapastelapp.ui.theme.NewYorkPink
+import com.example.rosapastelapp.viewmodel.MainViewModel
+import com.example.rosapastelapp.navigation.Screen
+
 @Composable
-fun ProductDetailScreen() {
-    // Estado para la cantidad del producto
+fun DetalleProducto(viewModel: MainViewModel) {
     var quantity by remember { mutableIntStateOf(1) }
-    // Estado para el color seleccionado (usamos el color vino tinto por defecto)
-    var selectedColor by remember { mutableStateOf(Color(0xFF8B002B)) } // Vino tinto (Cordovan similar)
+    var selectedColor by remember { mutableStateOf(Color(0xFF8B002B)) }
     val NewYorkPink = Color(0xFFd87e8b)
     Scaffold(
         bottomBar = { ProductBottomBar() }
@@ -42,7 +41,7 @@ fun ProductDetailScreen() {
         ) {
             // Sección superior de Imagen y Controles
             ProductImageAndControls(
-                productImageRes = R.drawable.tinta_essence, // Reemplaza con tu imagen de producto
+                productImageRes = R.drawable.tinta_essence,
                 onBackClicked = { /* Lógica de navegación hacia atrás */ }
             )
 
@@ -308,6 +307,6 @@ fun ProductBottomBar() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ProductDetailScreenPreview() {
-    ProductDetailScreen()
+fun DetalleProductoPreview() {
+    DetalleProducto(viewModel = MainViewModel())
 }
