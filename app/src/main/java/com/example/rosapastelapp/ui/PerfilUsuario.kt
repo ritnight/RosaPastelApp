@@ -89,7 +89,6 @@ fun PerfilUsuario(viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -170,7 +169,7 @@ private fun TopBarPerfil(viewModel: MainViewModel) {
         navigationIcon = {
             IconButton(onClick = { viewModel.navigateTo(Screen.MainScreen) }) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack, // <-- CORREGIDO
+                    imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Volver",
                     tint = Cordovan
                 )
@@ -181,8 +180,6 @@ private fun TopBarPerfil(viewModel: MainViewModel) {
         )
     )
 }
-
-// --- ITEM REUTILIZABLE PARA LA LISTA DE SETTINGS ---
 
 @Composable
 private fun SettingsItem(
@@ -234,7 +231,7 @@ private fun BottomNavBarPrincipal(
         containerColor = RosaFondoNav,
         tonalElevation = 4.dp
     ) {
-        // Home
+        // home
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
             onClick = { viewModel.navigateTo(Screen.MainScreen)  },
@@ -251,7 +248,7 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // --- Ítem Perfil ---
+        // perfil
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
             onClick = { viewModel.navigateTo(Screen.Profile) },
@@ -268,7 +265,7 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // --- Ítem Favoritos ---
+        // favoritos
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
             onClick = { /* clase por crear */ },

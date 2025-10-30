@@ -30,13 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.BabyPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
+import com.example.rosapastelapp.viewmodel.MainViewModel
+import com.example.rosapastelapp.navigation.Screen
 
-// --- Data Class y Lista de Productos ---
 data class CartProduct(
     val id: Int,
     val name: String,
@@ -56,13 +58,13 @@ val dummyCartList = listOf(
 // BARRA SUPERIOR (TOP BAR)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartTopBar() {
+fun CartTopBar(viewModel: MainViewModel) {
     CenterAlignedTopAppBar(
         title = {
             Text("Carrito de Compras", fontWeight = FontWeight.Bold, color = Cordovan)
         },
         navigationIcon = {
-            IconButton(onClick = { /* Acción de volver */ }) {
+            IconButton(onClick = {viewModel.navigateTo(Screen.MainScreen) }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Volver",
@@ -112,16 +114,17 @@ fun CartCheckoutBar(total: String) {
 
 @Composable
 private fun BottomNavBarPrincipal(
-    itemSeleccionado: String,
-    onItemSelected: (String) -> Unit
+    viewModel: MainViewModel,
+    itemSeleccionado: String
 ) {
     NavigationBar(
-        containerColor = BabyPink,
-        tonalElevation = 0.dp
+        containerColor = RosaFondoNav,
+        tonalElevation = 4.dp
     ) {
+        // home
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
-            onClick = { onItemSelected("Home") },
+            onClick = { viewModel.navigateTo(Screen.MainScreen)  },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
@@ -135,12 +138,13 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
+        // perfil
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
-            onClick = { onItemSelected("Profile") },
+            onClick = { viewModel.navigateTo(Screen.Profile) },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Person ,
+                    imageVector = Icons.Filled.Person,
                     contentDescription = "Perfil",
                     modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
                 )
@@ -151,12 +155,13 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
+        // favoritos
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
-            onClick = { onItemSelected("Favorites") },
+            onClick = { /* clase por crear */ },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
+                    imageVector = Icons.Filled.FavoriteBorder,
                     contentDescription = "Favoritos",
                     modifier = Modifier.size(if (itemSeleccionado == "Favorites") 36.dp else 28.dp)
                 )
@@ -170,23 +175,22 @@ private fun BottomNavBarPrincipal(
     }
 }
 
-
-// --- Pantalla Principal del Carrito ---
+//pantalla principal de carrito
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen() {
+fun Carrito(viewModel: MainViewModel) {
     // Variable de estado para el Bottom Bar
     var itemNavSeleccionado by remember { mutableStateOf("Cart") } // Asumimos un estado 'Cart'
 
     Scaffold(
-        topBar = { CartTopBar() },
+        topBar = { CartTopBar(viewModel = viewModel) },
         bottomBar = {
             // COMIENZA BOTTOM BAR
             Column {
                 CartCheckoutBar(total = "$46.870")
                 BottomNavBarPrincipal(
-                    itemSeleccionado = itemNavSeleccionado,
-                    onItemSelected = { itemNavSeleccionado = it }
+                    viewModel = viewModel,
+                    itemSeleccionado = itemNavSeleccionado
                 )
             }
         }
@@ -293,8 +297,8 @@ fun QuantitySelectorCart() {
 // --- PREVIEW ---
 @Preview(showBackground = true)
 @Composable
-fun CartScreenPreview() {
+fun CarritoScreenPreview() {
     RosaPastelAppTheme {
-        CartScreen()
+        Carrito(viewModel = MainViewModel())
     }
 }

@@ -22,6 +22,7 @@ import com.example.rosapastelapp.ui.CrearCuenta
 import com.example.rosapastelapp.ui.PantallaPrincipal
 import com.example.rosapastelapp.ui.Sucursales
 import com.example.rosapastelapp.ui.PerfilUsuario
+import com.example.rosapastelapp.ui.Carrito
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 import kotlinx.coroutines.flow.collectLatest
 
@@ -84,6 +85,9 @@ fun AppNavHost(viewModel: MainViewModel = viewModel()) {
             }
             composable(route = Screen.Profile.route) {
                 PerfilUsuario(viewModel = viewModel)
+            }
+            composable(route = Screen.Cart.route) {
+                Carrito(viewModel = viewModel)
             }
         }
     }

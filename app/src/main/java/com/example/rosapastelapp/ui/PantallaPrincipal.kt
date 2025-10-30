@@ -139,7 +139,7 @@ private fun TopBarPrincipal(viewModel: MainViewModel) {
                     modifier = Modifier.size(28.dp)
                 )
             }
-            IconButton(onClick = { /* Acción de carrito */ }) {
+            IconButton(onClick = { viewModel.navigateTo(Screen.Cart) }) {
                 Icon(
                     imageVector = Icons.Default.ShoppingCart,
                     contentDescription = "Carrito",
