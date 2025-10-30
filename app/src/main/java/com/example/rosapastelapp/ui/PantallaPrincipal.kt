@@ -53,8 +53,8 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
         topBar = { TopBarPrincipal(viewModel = viewModel) },
         bottomBar = {
             BottomNavBarPrincipal(
-                itemSeleccionado = itemNavSeleccionado,
-                onItemSelected = { itemNavSeleccionado = it }
+                viewModel = viewModel,
+                itemSeleccionado = itemNavSeleccionado
             )
         }
     ) { paddingValues ->
@@ -323,8 +323,8 @@ private fun ProductoItem(
 
 @Composable
 private fun BottomNavBarPrincipal(
-    itemSeleccionado: String,
-    onItemSelected: (String) -> Unit
+    viewModel: MainViewModel,
+    itemSeleccionado: String
 ) {
     NavigationBar(
         containerColor = RosaFondoNav,
@@ -333,7 +333,7 @@ private fun BottomNavBarPrincipal(
         // Home
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
-            onClick = { onItemSelected("Home") },
+            onClick = { viewModel.navigateTo(Screen.MainScreen)  },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
@@ -349,7 +349,7 @@ private fun BottomNavBarPrincipal(
         // Perfil
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
-            onClick = { onItemSelected("Profile") },
+            onClick = { viewModel.navigateTo(Screen.Profile) },
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.Person ,
@@ -366,7 +366,7 @@ private fun BottomNavBarPrincipal(
         // Favoritos
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
-            onClick = { onItemSelected("Favorites") },
+            onClick = { /* clase por crear */ },
             icon = {
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,

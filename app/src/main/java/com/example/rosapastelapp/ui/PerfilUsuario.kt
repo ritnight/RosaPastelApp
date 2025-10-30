@@ -36,21 +36,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.*
+import com.example.rosapastelapp.viewmodel.MainViewModel
+import com.example.rosapastelapp.navigation.Screen
 
 private val GrisClaroIcono = Color(0xFFEBEBEB)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilUsuario() {
+fun PerfilUsuario(viewModel: MainViewModel) {
 
     var itemNavSeleccionado by remember { mutableStateOf("Profile") }
 
     Scaffold(
-        topBar = { TopBarPerfil() },
+        topBar = { TopBarPerfil(viewModel = viewModel) },
         bottomBar = {
             BottomNavBarPrincipal(
-                itemSeleccionado = itemNavSeleccionado,
-                onItemSelected = { itemNavSeleccionado = it }
+                viewModel = viewModel,
+                itemSeleccionado = itemNavSeleccionado
             )
         }
     ) { paddingValues ->
@@ -160,13 +162,13 @@ fun PerfilUsuario() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBarPerfil() {
+private fun TopBarPerfil(viewModel: MainViewModel) {
     CenterAlignedTopAppBar(
         title = {
             Text("Perfil", fontWeight = FontWeight.Bold, color = Cordovan)
         },
         navigationIcon = {
-            IconButton(onClick = { /* Acción de volver */ }) {
+            IconButton(onClick = { viewModel.navigateTo(Screen.MainScreen) }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack, // <-- CORREGIDO
                     contentDescription = "Volver",
@@ -225,20 +227,20 @@ private fun SettingsItem(
 
 @Composable
 private fun BottomNavBarPrincipal(
-    itemSeleccionado: String,
-    onItemSelected: (String) -> Unit
+    viewModel: MainViewModel,
+    itemSeleccionado: String
 ) {
     NavigationBar(
-        containerColor = BabyPink,
-        tonalElevation = 0.dp
+        containerColor = RosaFondoNav,
+        tonalElevation = 4.dp
     ) {
-        // --- Ítem Home ---
+        // Home
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
-            onClick = { onItemSelected("Home") },
+            onClick = { viewModel.navigateTo(Screen.MainScreen)  },
             icon = {
                 Icon(
-                    imageVector = Icons.Filled.Home,
+                    imageVector = Icons.Default.Home,
                     contentDescription = "Inicio",
                     modifier = Modifier.size(if (itemSeleccionado == "Home") 36.dp else 28.dp)
                 )
@@ -252,7 +254,7 @@ private fun BottomNavBarPrincipal(
         // --- Ítem Perfil ---
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
-            onClick = { onItemSelected("Profile") },
+            onClick = { viewModel.navigateTo(Screen.Profile) },
             icon = {
                 Icon(
                     imageVector = Icons.Filled.Person,
@@ -269,7 +271,7 @@ private fun BottomNavBarPrincipal(
         // --- Ítem Favoritos ---
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
-            onClick = { onItemSelected("Favorites") },
+            onClick = { /* clase por crear */ },
             icon = {
                 Icon(
                     imageVector = Icons.Filled.FavoriteBorder,
@@ -291,6 +293,6 @@ private fun BottomNavBarPrincipal(
 @Composable
 fun PerfilUsuarioPreview() {
     RosaPastelAppTheme {
-        PerfilUsuario()
+        PerfilUsuario(viewModel = MainViewModel())
     }
 }
