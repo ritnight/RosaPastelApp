@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rosapastelapp.R
+import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.ui.theme.FondoGrisClaro
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
@@ -196,11 +197,12 @@ fun CrearCuenta(viewModel: MainViewModel) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // boton para ingresar lleva a inicio
+        // boton para ingresar lleva a inicio de sesion
         Button(
             onClick = {
                 // * logica de registro, pendiente
                 println("Nombre: $nombre, Correo: $correo, Contraseña: $contrasena")
+                viewModel.navigateTo(Screen.Login)
             },
             modifier = Modifier
                 .fillMaxWidth()

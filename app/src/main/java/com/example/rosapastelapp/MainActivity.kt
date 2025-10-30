@@ -78,4 +78,4 @@ fun AppNavHost(viewModel: MainViewModel = viewModel()) {
                 PantallaPrincipal(viewModel = viewModel) }
             }
         }
-    }
+}
