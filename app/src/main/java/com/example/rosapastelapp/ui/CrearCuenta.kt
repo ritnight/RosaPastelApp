@@ -26,9 +26,10 @@ import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.FondoGrisClaro
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
+import com.example.rosapastelapp.viewmodel.MainViewModel
 
 @Composable
-fun CrearCuenta() {
+fun CrearCuenta(viewModel: MainViewModel) {
 
     var nombre by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
@@ -195,7 +196,7 @@ fun CrearCuenta() {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Boton de "Ingresar"
+        // boton para ingresar lleva a inicio
         Button(
             onClick = {
                 // * logica de registro, pendiente
@@ -233,6 +234,6 @@ fun CrearCuenta() {
 @Composable
 fun CrearCuentaPreview() {
     RosaPastelAppTheme {
-        CrearCuenta()
+        CrearCuenta(viewModel = MainViewModel())
     }
 }

@@ -18,6 +18,8 @@ import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.viewmodel.MainViewModel
 import com.example.rosapastelapp.ui.HomeScreen
 import com.example.rosapastelapp.ui.InicioSesion
+import com.example.rosapastelapp.ui.CrearCuenta
+import com.example.rosapastelapp.ui.PantallaPrincipal
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 import kotlinx.coroutines.flow.collectLatest
 
@@ -62,13 +64,18 @@ fun AppNavHost(viewModel: MainViewModel = viewModel()) {
             startDestination = Screen.Home.route, // Pantalla inicial
             modifier = Modifier.padding(innerPadding)
         ) {
-            // Rutas de prueba (Home -> Login)
+            // rutas de navegación
             composable(route = Screen.Home.route) {
                 HomeScreen(viewModel = viewModel)
             }
             composable(route = Screen.Login.route) {
                 InicioSesion(viewModel = viewModel)
             }
+            composable(route = Screen.Register.route) {
+                CrearCuenta(viewModel = viewModel)
+            }
+            composable(route = Screen.MainScreen.route) {
+                PantallaPrincipal(viewModel = viewModel) }
+            }
         }
     }
-}

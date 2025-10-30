@@ -1,5 +1,6 @@
 package com.example.rosapastelapp.navigation
 
+
 sealed class NavigationEvent {
     data class NavigateTo(
         val route: Screen,

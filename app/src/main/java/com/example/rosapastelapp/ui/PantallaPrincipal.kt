@@ -34,13 +34,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
+import com.example.rosapastelapp.viewmodel.MainViewModel
+
 
 val RosaPastelBanner = Color(0xFFE5A6B6)
 val GrisClaroBanner = Color(0xFFF0F0F0)
 val RosaFondoNav = Color(0xFFFBEFF2)
 
 @Composable
-fun PantallaPrincipal() {
+fun PantallaPrincipal(viewModel: MainViewModel) {
     var tabSeleccionada by remember {mutableStateOf(0) }
 
     var itemNavSeleccionado by remember { mutableStateOf("Home") }
@@ -60,8 +62,7 @@ fun PantallaPrincipal() {
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            PromoBanner()
-
+            PromoBanner(viewModel = viewModel)
             TabsBelleza(
                 tabSeleccionada = tabSeleccionada,
                 onTabSelected = { tabSeleccionada = it }
@@ -146,7 +147,7 @@ private fun TopBarPrincipal() {
 // BANNER DE PROMOCIÓN
 
 @Composable
-private fun PromoBanner() {
+private fun PromoBanner(viewModel: MainViewModel) {
     Surface(
         color = RosaPastelBanner,
         modifier = Modifier.fillMaxWidth()
@@ -267,8 +268,8 @@ private fun ContenidoBelleza() {
             )
             ProductoItem(
                 imagenId = R.drawable.tinta_essence,
-                marca = "Maybelline",
-                nombre = "Super Stay Teddy Tint",
+                marca = "Escensse",
+                nombre = "What A Tint!",
                 precio = "$10.990"
             )
         }
@@ -380,6 +381,6 @@ private fun BottomNavBarPrincipal(
 @Composable
 fun PantallaPrincipalPreview() {
     RosaPastelAppTheme {
-        PantallaPrincipal()
+        PantallaPrincipal(viewModel = MainViewModel())
     }
 }
