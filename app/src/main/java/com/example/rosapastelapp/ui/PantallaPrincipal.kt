@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 import com.example.rosapastelapp.viewmodel.MainViewModel
+import com.example.rosapastelapp.navigation.Screen
+import androidx.compose.foundation.clickable
 
 
 val RosaPastelBanner = Color(0xFFE5A6B6)
@@ -48,7 +50,7 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
     var itemNavSeleccionado by remember { mutableStateOf("Home") }
 
     Scaffold(
-        topBar = { TopBarPrincipal() },
+        topBar = { TopBarPrincipal(viewModel = viewModel) },
         bottomBar = {
             BottomNavBarPrincipal(
                 itemSeleccionado = itemNavSeleccionado,
@@ -88,7 +90,7 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBarPrincipal() {
+private fun TopBarPrincipal(viewModel: MainViewModel) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -106,7 +108,11 @@ private fun TopBarPrincipal() {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 // Dirección
-                Column {
+                Column(
+                    modifier = Modifier.clickable {
+                        viewModel.navigateTo(Screen.Stores)// acción al hacer click en la dirección
+                    }
+                ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Default.LocationOn,
