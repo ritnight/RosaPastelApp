@@ -1,4 +1,4 @@
-package com.example.rosapastelapp.ui // Ajusta tu paquete si es necesario
+package com.example.rosapastelapp.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,15 +39,14 @@ fun DetalleProducto(viewModel: MainViewModel) {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            // Sección superior de Imagen y Controles
             ProductImageAndControls(
                 productImageRes = R.drawable.tinta_essence,
-                onBackClicked = { /* Lógica de navegación hacia atrás */ }
+                onBackClicked = { viewModel.navigateTo(Screen.MainScreen) }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Detalles del Producto (Título, Precio, Descripción)
+            // detalles del producto
             ProductInfoSection(
                 title = "What a Tint!",
                 price = "$4.990",
@@ -56,7 +55,7 @@ fun DetalleProducto(viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Selector de Color
+            // seleccion de color
             ColorSelector(
                 selectedColor = selectedColor,
                 onColorSelected = { selectedColor = it }
@@ -64,13 +63,13 @@ fun DetalleProducto(viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Selector de Cantidad
+            // seleccion de cantidad
             QuantitySelector(
                 quantity = quantity,
                 onQuantityChange = { quantity = it }
             )
 
-            // Botón Añadir al Carrito
+            // boton añadir al carrito
             Button(
                 onClick = { /* Lógica de añadir al carrito */ },
                 modifier = Modifier
@@ -87,8 +86,7 @@ fun DetalleProducto(viewModel: MainViewModel) {
     }
 }
 
-// --- Componentes Reutilizables ---
-
+// elementos reutilizables
 @Composable
 fun ProductImageAndControls(
     productImageRes: Int,
@@ -97,20 +95,17 @@ fun ProductImageAndControls(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(350.dp) // Altura para mostrar ambas partes de la imagen
+            .height(350.dp)
     ) {
-        // La imagen principal del producto (izquierda)
         Image(
             painter = painterResource(id = productImageRes),
             contentDescription = "Lip and Cheek Tint Product",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxWidth(0.55f) // Simula el ancho de la imagen izquierda
+                .fillMaxWidth(0.55f)
                 .align(Alignment.CenterStart)
                 .fillMaxHeight()
         )
-
-        // El aplicador (derecha) - Simplemente un fondo blanco con el texto
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.45f)
@@ -132,14 +127,12 @@ fun ProductImageAndControls(
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
-                    // No hay una forma directa de invertir en Compose,
-                    // esto es una simplificación visual.
                     modifier = Modifier.padding(16.dp)
                 )
             }
         }
 
-        // Flecha de retroceso (arriba izquierda)
+        //boton para ir atras
         IconButton(
             onClick = onBackClicked,
             modifier = Modifier
@@ -151,7 +144,7 @@ fun ProductImageAndControls(
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
         }
 
-        // Icono de corazón (favorito) (derecha media)
+        // boton de corazón (favorito)
         Icon(
             imageVector = Icons.Filled.FavoriteBorder,
             contentDescription = "Favorite",
@@ -189,7 +182,7 @@ fun ProductInfoSection(title: String, price: String, brand: String) {
             }
         }
 
-        // Descripción del producto
+        // descripccion del producto
         Text(
             text = "Tinte para labios y mejillas. Su textura no pegajosa, similar al agua, proporciona un tono suave con un acabado natural.",
             style = MaterialTheme.typography.bodyMedium,
@@ -215,7 +208,7 @@ fun ColorSelector(selectedColor: Color, onColorSelected: (Color) -> Unit) {
                         .clickable { onColorSelected(color) }
                 ) {
                     if (color == selectedColor) {
-                        // Borde de selección para indicar el color elegido
+                        // borde de selección para indicar el color elegido
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -275,7 +268,7 @@ fun QuantitySelector(quantity: Int, onQuantityChange: (Int) -> Unit) {
 
 @Composable
 fun ProductBottomBar() {
-    // Barra de navegación inferior simple (Home, Perfil, Favoritos)
+    // barra de navegación inferior simple (Home, Perfil, Favoritos)
     Row(
         modifier = Modifier
             .fillMaxWidth()
