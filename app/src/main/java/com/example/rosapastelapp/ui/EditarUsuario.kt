@@ -9,8 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,67 +23,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
-import com.example.rosapastelapp.ui.theme.Cordovan
-import com.example.rosapastelapp.ui.theme.NewYorkPink
-import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
-import com.example.rosapastelapp.viewmodel.MainViewModel
 import com.example.rosapastelapp.navigation.Screen
-
+import com.example.rosapastelapp.ui.theme.*
+import com.example.rosapastelapp.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditarUsuario(viewModel: MainViewModel) {
 
-    // valores de ejemplo para los campos editables
     val nombre = "Lara Jean"
     val correo = "larajean@gmail.com"
     val contrasena = "************"
     val direccion = "Calle Falsa 123"
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Editar perfil", color = Cordovan) },
-                navigationIcon = {
-                    IconButton(onClick = { viewModel.navigateTo(Screen.Profile) }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver", tint = Cordovan)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-            )
-        },
+        topBar = { TopBarEditarUsuario(viewModel) },
         bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .height(60.dp)
-                    .border(1.dp, Color.LightGray)
-                    .padding(horizontal = 40.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_home),
-                        contentDescription = "Inicio",
-                        modifier = Modifier.size(30.dp)
-                    )
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_monito),
-                        contentDescription = "Perfil",
-                        modifier = Modifier.size(30.dp)
-                    )
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_corazon),
-                        contentDescription = "Favoritos",
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-            }
+            BottomNavBarPrincipal(
+                viewModel = viewModel,
+                itemSeleccionado = "Profile"
+            )
         }
     ) { innerPadding ->
         Column(
@@ -96,7 +54,6 @@ fun EditarUsuario(viewModel: MainViewModel) {
         ) {
 
             Spacer(modifier = Modifier.height(24.dp))
-
 
             Box(contentAlignment = Alignment.BottomEnd) {
                 Image(
@@ -135,27 +92,25 @@ fun EditarUsuario(viewModel: MainViewModel) {
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
-            // nombre Completo
             EditableProfileField(label = "Nombre completo", value = nombre, isPassword = false)
             Divider(color = Color.LightGray, thickness = 1.dp, modifier = Modifier.padding(horizontal = 24.dp))
 
-            // correo electrónico
             EditableProfileField(label = "Correo electrónico", value = correo, isPassword = false)
             Divider(color = Color.LightGray, thickness = 1.dp, modifier = Modifier.padding(horizontal = 24.dp))
 
-            // contraseña
-            EditableProfileField(label = "Contraseña", value = "***********", isPassword = true)
+            EditableProfileField(label = "Contraseña", value = contrasena, isPassword = true)
             Divider(color = Color.LightGray, thickness = 1.dp, modifier = Modifier.padding(horizontal = 24.dp))
 
-            // dirección
             EditableProfileField(label = "Dirección", value = direccion, isPassword = false)
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(onClick = { /* acción futura */ },
+            Button(
+                onClick = { /* acción futura */ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
+                    .height(50.dp)
+                    .padding(horizontal = 32.dp),
                 shape = RoundedCornerShape(percent = 50),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = NewYorkPink,
@@ -174,8 +129,90 @@ fun EditarUsuario(viewModel: MainViewModel) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditableProfileField(label: String = "Nombre completo", value: String = "", isPassword: Boolean = false) {
+private fun TopBarEditarUsuario(viewModel: MainViewModel) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text("Editar perfil", fontWeight = FontWeight.Bold, color = Cordovan)
+        },
+        navigationIcon = {
+            IconButton(onClick = { viewModel.navigateTo(Screen.Profile) }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = Cordovan
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent
+        )
+    )
+}
+
+@Composable
+private fun BottomNavBarPrincipal(
+    viewModel: MainViewModel,
+    itemSeleccionado: String
+) {
+    NavigationBar(
+        containerColor = RosaFondoNav,
+        tonalElevation = 4.dp
+    ) {
+        NavigationBarItem(
+            selected = itemSeleccionado == "Home",
+            onClick = { viewModel.navigateTo(Screen.MainScreen) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Inicio",
+                    modifier = Modifier.size(if (itemSeleccionado == "Home") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
+        )
+        NavigationBarItem(
+            selected = itemSeleccionado == "Profile",
+            onClick = { viewModel.navigateTo(Screen.Profile) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = "Perfil",
+                    modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
+        )
+        NavigationBarItem(
+            selected = itemSeleccionado == "Favorites",
+            onClick = { viewModel.navigateTo(Screen.Favorites) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.FavoriteBorder,
+                    contentDescription = "Favoritos",
+                    modifier = Modifier.size(if (itemSeleccionado == "Favorites") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
+        )
+    }
+}
+
+@Composable
+fun EditableProfileField(label: String, value: String, isPassword: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -204,7 +241,6 @@ fun EditableProfileField(label: String = "Nombre completo", value: String = "", 
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

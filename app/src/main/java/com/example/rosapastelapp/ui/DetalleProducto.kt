@@ -8,9 +8,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,21 +22,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
+import com.example.rosapastelapp.navigation.Screen
+import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.viewmodel.MainViewModel
-import com.example.rosapastelapp.navigation.Screen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetalleProducto(viewModel: MainViewModel) {
     var quantity by remember { mutableIntStateOf(1) }
     var selectedColor by remember { mutableStateOf(Color(0xFF8B002B)) }
-    val NewYorkPink = Color(0xFFd87e8b)
+
     Scaffold(
-        bottomBar = { ProductBottomBar() }
+        topBar = { TopBarDetalleProducto(viewModel) },
+        bottomBar = {
+            BottomNavBarPrincipal(
+                viewModel = viewModel,
+                itemSeleccionado = "Home"
+            )
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -46,7 +59,6 @@ fun DetalleProducto(viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // detalles del producto
             ProductInfoSection(
                 title = "What a Tint!",
                 price = "$4.990",
@@ -55,7 +67,6 @@ fun DetalleProducto(viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // seleccion de color
             ColorSelector(
                 selectedColor = selectedColor,
                 onColorSelected = { selectedColor = it }
@@ -63,22 +74,23 @@ fun DetalleProducto(viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // seleccion de cantidad
             QuantitySelector(
                 quantity = quantity,
                 onQuantityChange = { quantity = it }
             )
 
-            // boton añadir al carrito
             Button(
-                onClick = { /* Lógica de añadir al carrito */ },
+                onClick = { /* acción futura */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
                     .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = NewYorkPink) // Usando tu color rosa
+                colors = ButtonDefaults.buttonColors(containerColor = NewYorkPink)
             ) {
-                Text("Añadir al carrito", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+                Text(
+                    "Añadir al carrito",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -86,9 +98,26 @@ fun DetalleProducto(viewModel: MainViewModel) {
     }
 }
 
-// elementos reutilizables
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductImageAndControls(
+private fun TopBarDetalleProducto(viewModel: MainViewModel) {
+    TopAppBar(
+        title = {},
+        navigationIcon = {
+            IconButton(onClick = { viewModel.navigateTo(Screen.MainScreen) }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = Cordovan
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+    )
+}
+
+@Composable
+private fun ProductImageAndControls(
     productImageRes: Int,
     onBackClicked: () -> Unit
 ) {
@@ -99,7 +128,7 @@ fun ProductImageAndControls(
     ) {
         Image(
             painter = painterResource(id = productImageRes),
-            contentDescription = "Lip and Cheek Tint Product",
+            contentDescription = "Producto",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth(0.55f)
@@ -113,7 +142,6 @@ fun ProductImageAndControls(
                 .fillMaxHeight()
                 .background(Color.White)
         ) {
-            // El círculo rosa y el texto invertido
             Box(
                 modifier = Modifier
                     .size(150.dp)
@@ -127,27 +155,16 @@ fun ProductImageAndControls(
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    textAlign = TextAlign.Center
                 )
             }
         }
 
-        //boton para ir atras
-        IconButton(
-            onClick = onBackClicked,
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(16.dp)
-                .clip(CircleShape)
-                .background(Color.White)
-        ) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
-        }
-
-        // boton de corazón (favorito)
         Icon(
             imageVector = Icons.Filled.FavoriteBorder,
-            contentDescription = "Favorite",
+            contentDescription = "Favorito",
+            tint = Cordovan,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(32.dp)
@@ -170,19 +187,17 @@ fun ProductInfoSection(title: String, price: String, brand: String) {
 
         Text(brand, style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
 
-        // Estrellas de Valoración (5 Estrellas completas en la imagen)
         Row(modifier = Modifier.padding(vertical = 4.dp)) {
             repeat(5) {
                 Icon(
-                    Icons.Filled.Star,
-                    contentDescription = "Rating Star",
-                    tint = Color(0xFFFFC107), // Color amarillo dorado
+                    imageVector = Icons.Filled.Star, // Se usa imageVector en lugar de painter
+                    contentDescription = null,
+                    tint = Color(0xFFFFC107),
                     modifier = Modifier.size(20.dp)
                 )
             }
         }
 
-        // descripccion del producto
         Text(
             text = "Tinte para labios y mejillas. Su textura no pegajosa, similar al agua, proporciona un tono suave con un acabado natural.",
             style = MaterialTheme.typography.bodyMedium,
@@ -193,7 +208,7 @@ fun ProductInfoSection(title: String, price: String, brand: String) {
 
 @Composable
 fun ColorSelector(selectedColor: Color, onColorSelected: (Color) -> Unit) {
-    val colors = listOf(Color(0xFF8B002B), Color(0xFFE91E63)) // Vino tinto y Rosa Brillante
+    val colors = listOf(Color(0xFF8B002B), Color(0xFFE91E63))
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Text("Color", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold))
@@ -208,15 +223,11 @@ fun ColorSelector(selectedColor: Color, onColorSelected: (Color) -> Unit) {
                         .clickable { onColorSelected(color) }
                 ) {
                     if (color == selectedColor) {
-                        // borde de selección para indicar el color elegido
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(CircleShape)
-                                .background(Color.Transparent)
-                                .padding(2.dp)
-                                .clip(CircleShape)
-                                .background(Color.White.copy(alpha = 0.5f))
+                                .background(Color.White.copy(alpha = 0.4f))
                         )
                     }
                 }
@@ -230,36 +241,35 @@ fun QuantitySelector(quantity: Int, onQuantityChange: (Int) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
-        // Botón - (Disminuir)
         OutlinedButton(
             onClick = { if (quantity > 1) onQuantityChange(quantity - 1) },
             modifier = Modifier.size(36.dp),
             contentPadding = PaddingValues(0.dp),
-            border = null // Quitar el borde si es necesario
+            border = null
         ) {
             Text("-", fontSize = 18.sp, color = Color.Black)
         }
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // Cantidad Actual
         Text(
             text = quantity.toString(),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.width(24.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // Botón + (Aumentar)
         OutlinedButton(
             onClick = { onQuantityChange(quantity + 1) },
             modifier = Modifier.size(36.dp),
             contentPadding = PaddingValues(0.dp),
-            border = null // Quitar el borde si es necesario
+            border = null
         ) {
             Text("+", fontSize = 18.sp, color = Color.Black)
         }
@@ -267,33 +277,61 @@ fun QuantitySelector(quantity: Int, onQuantityChange: (Int) -> Unit) {
 }
 
 @Composable
-fun ProductBottomBar() {
-    // barra de navegación inferior simple (Home, Perfil, Favoritos)
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFFF0F0F0)) // Un color de fondo gris claro para la barra
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceAround
+private fun BottomNavBarPrincipal(
+    viewModel: MainViewModel,
+    itemSeleccionado: String
+) {
+    NavigationBar(
+        containerColor = RosaFondoNav,
+        tonalElevation = 4.dp
     ) {
-        // Icono Home
-        Icon(
-            painter = painterResource(id = R.drawable.ic_home), // Reemplaza con tu icono
-            contentDescription = "Home",
-            modifier = Modifier.size(30.dp).clickable { /* Nav Home */ }
+        NavigationBarItem(
+            selected = itemSeleccionado == "Home",
+            onClick = { viewModel.navigateTo(Screen.MainScreen) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Inicio",
+                    modifier = Modifier.size(if (itemSeleccionado == "Home") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
         )
-        // Icono Perfil
-        Icon(
-            painter = painterResource(id = R.drawable.ic_monito), // Reemplaza con tu icono
-            contentDescription = "Profile",
-            tint = Color.Gray,
-            modifier = Modifier.size(30.dp).clickable { /* Nav Profile */ }
+        NavigationBarItem(
+            selected = itemSeleccionado == "Profile",
+            onClick = { viewModel.navigateTo(Screen.Profile) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = "Perfil",
+                    modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
         )
-        // Icono Corazón (Favoritos)
-        Icon(
-            painter = painterResource(id = R.drawable.ic_corazon), // Reemplaza con tu icono
-            contentDescription = "Favorites",
-            modifier = Modifier.size(30.dp).clickable { /* Nav Favorites */ }
+        NavigationBarItem(
+            selected = itemSeleccionado == "Favorites",
+            onClick = { viewModel.navigateTo(Screen.Favorites) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.FavoriteBorder,
+                    contentDescription = "Favoritos",
+                    modifier = Modifier.size(if (itemSeleccionado == "Favorites") 36.dp else 28.dp)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = NewYorkPink,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            )
         )
     }
 }
