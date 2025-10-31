@@ -158,7 +158,7 @@ private fun BottomNavBarPrincipal(
         // favoritos
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
-            onClick = { /* clase por crear */ },
+            onClick = { viewModel.navigateTo(Screen.Favorites) },
             icon = {
                 Icon(
                     imageVector = Icons.Filled.FavoriteBorder,
