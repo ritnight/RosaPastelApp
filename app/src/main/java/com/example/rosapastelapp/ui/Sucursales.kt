@@ -1,5 +1,6 @@
 package com.example.rosapastelapp.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,8 +17,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.viewmodel.MainViewModel
+
+// importaciones del recurso nativo
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
 
 data class Address(
     val line1: String,
@@ -30,10 +39,22 @@ val dummyAddressList = listOf(
     Address("Avenida Antonio Varas 666", "Providencia, REGIÓN METROPOLITANA")
 )
 
+@SuppressLint("RememberReturnType")
 @Composable
 fun Sucursales(viewModel: MainViewModel = MainViewModel()) {
-    // Estado para guardar el índice de la dirección seleccionada
+    // estado para guardar el índice de la dirección seleccionada
     var selectedAddressIndex by remember { mutableStateOf(0) }
+
+    // contexto para configurar OSMDroid
+    val context = LocalContext.current
+
+    // se configura OSMDroid una sola vez
+    remember {
+        Configuration.getInstance().load(context, context.getSharedPreferences("osmdroid", 0))
+    }
+
+    // punto central del mapa (ej: Providencia)
+    val providencia = remember { GeoPoint(-33.4357, -70.6136) }
 
     Column(
         modifier = Modifier
@@ -103,6 +124,41 @@ fun Sucursales(viewModel: MainViewModel = MainViewModel()) {
             modifier = Modifier.clickable { /* Lógica para ir a editar direcciones */ }
         )
 
+        // Mapa de Sucursales
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Ver en el mapa",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // el mapa usa un tamaño fijo para no interferir con el scroll
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp) // altura del mapa
+        ) {
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = {
+                    // 1 crea la vista nativa del mapa
+                    MapView(it).apply {
+                        // 2 se configura la fuente del mapa
+                        setTileSource(TileSourceFactory.MAPNIK)
+                        setMultiTouchControls(true)
+                        // 3 se establece la ubicación y el zoom inicial
+                        controller.setCenter(providencia)
+                        controller.setZoom(14.0)
+                    }
+                },
+                update = { mapView ->
+                    // lógica para actualizar el mapa (por ejemplo, si cambiamos de dirección)
+                }
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -170,6 +226,7 @@ fun AddressCard(
 }
 
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SucursalesPreview() {

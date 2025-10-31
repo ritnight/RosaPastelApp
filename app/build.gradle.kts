@@ -65,4 +65,10 @@ dependencies {
 
     // 3. COROUTINES (Necesario para SharedFlow en MainViewModel)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+
+    // 4. SUCURSALES (Para recurso nativo)
+    implementation("androidx.compose.ui:ui-viewbinding:1.6.8")
+
+    // 5. SUCURSALS (libreria de OpenStreetMap)
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
 }
