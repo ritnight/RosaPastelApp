@@ -93,7 +93,7 @@ fun PerfilUsuario(viewModel: MainViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
-                    .clickable { /* Acción de editar perfil */ }
+                    .clickable { viewModel.navigateTo(Screen.EditProfile) }
                     .padding(vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {

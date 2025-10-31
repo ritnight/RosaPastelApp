@@ -27,10 +27,13 @@ import com.example.rosapastelapp.R
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.NewYorkPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
+import com.example.rosapastelapp.viewmodel.MainViewModel
+import com.example.rosapastelapp.navigation.Screen
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilEditar() {
+fun EditarUsuario(viewModel: MainViewModel) {
 
     // valores de ejemplo para los campos editables
     val nombre = "Lara Jean"
@@ -43,7 +46,7 @@ fun PerfilEditar() {
             TopAppBar(
                 title = { Text("Editar perfil", color = Cordovan) },
                 navigationIcon = {
-                    IconButton(onClick = { /* Acción para volver */ }) {
+                    IconButton(onClick = { viewModel.navigateTo(Screen.Profile) }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver", tint = Cordovan)
                     }
                 },
@@ -172,7 +175,7 @@ fun PerfilEditar() {
 }
 
 @Composable
-fun EditableProfileField(label: String, value: String, isPassword: Boolean) {
+fun EditableProfileField(label: String = "Nombre completo", value: String = "", isPassword: Boolean = false) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -205,8 +208,8 @@ fun EditableProfileField(label: String, value: String, isPassword: Boolean) {
 
 @Preview(showBackground = true)
 @Composable
-fun PerfilEditarPreview() {
+fun EditarUsuarioPreview() {
     RosaPastelAppTheme {
-        PerfilEditar()
+        EditarUsuario(viewModel = MainViewModel())
     }
 }
