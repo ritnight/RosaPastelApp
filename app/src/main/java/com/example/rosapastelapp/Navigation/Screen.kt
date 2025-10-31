@@ -29,5 +29,9 @@ sealed class Screen(val route: String) {
     // Corresponde a Sucursales.kt
     data object Stores : Screen(route = "stores_page")
 
-
+    //corresponde a Favoritos.kt
+    data object Favorites : Screen(route = "favorites_page")
 }
+
+
+

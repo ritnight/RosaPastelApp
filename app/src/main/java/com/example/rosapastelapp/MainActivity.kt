@@ -25,6 +25,7 @@ import com.example.rosapastelapp.ui.PerfilUsuario
 import com.example.rosapastelapp.ui.Carrito
 import com.example.rosapastelapp.ui.DetalleProducto
 import com.example.rosapastelapp.ui.EditarUsuario
+import com.example.rosapastelapp.ui.Favoritos
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 import kotlinx.coroutines.flow.collectLatest
 
@@ -96,6 +97,9 @@ fun AppNavHost(viewModel: MainViewModel = viewModel()) {
             }
             composable(route = Screen.EditProfile.route) {
                 EditarUsuario(viewModel = viewModel)
+            }
+            composable(route = Screen.Favorites.route){
+                Favoritos(viewModel = viewModel)
             }
         }
     }
