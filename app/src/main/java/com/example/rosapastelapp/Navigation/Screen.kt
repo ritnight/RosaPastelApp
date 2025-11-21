@@ -31,6 +31,8 @@ sealed class Screen(val route: String) {
 
     //corresponde a Favoritos.kt
     data object Favorites : Screen(route = "favorites_page")
+    //corresponde a Posts.kt
+    data object Posts : Screen(route = "posts_page")
 }
 
 

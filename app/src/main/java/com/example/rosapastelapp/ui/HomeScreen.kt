@@ -112,6 +112,10 @@ fun HomeScreen(viewModel: MainViewModel) { //acepta el  viewmodel
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
+                Button(onClick = { viewModel.navigateTo(Screen.Posts) }) {
+                    Text("Probar API")
+                }
+
             }
 
             // bloque inferior copyright
