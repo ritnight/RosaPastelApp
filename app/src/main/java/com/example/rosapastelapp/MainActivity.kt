@@ -28,7 +28,7 @@ import com.example.rosapastelapp.ui.EditarUsuario
 import com.example.rosapastelapp.ui.Favoritos
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 import kotlinx.coroutines.flow.collectLatest
-import com.example.rosapastelapp.ui.PostScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,9 +101,6 @@ fun AppNavHost(viewModel: MainViewModel = viewModel()) {
             }
             composable(route = Screen.Favorites.route){
                 Favoritos(viewModel = viewModel)
-            }
-            composable(route = Screen.Posts.route) {
-                PostScreen()
             }
         }
     }

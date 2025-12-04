@@ -1,9 +1,10 @@
-
 package com.example.rosapastelapp.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -15,11 +16,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,11 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rosapastelapp.R
+import com.example.rosapastelapp.data.model.Producto
+import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 import com.example.rosapastelapp.viewmodel.MainViewModel
-import com.example.rosapastelapp.navigation.Screen
-import androidx.compose.foundation.clickable
-
 
 val RosaPastelBanner = Color(0xFFE5A6B6)
 val GrisClaroBanner = Color(0xFFF0F0F0)
@@ -45,9 +42,22 @@ val RosaFondoNav = Color(0xFFFBEFF2)
 
 @Composable
 fun PantallaPrincipal(viewModel: MainViewModel) {
-    var tabSeleccionada by remember {mutableStateOf(0) }
-
+    var tabSeleccionada by remember { mutableStateOf(0) }
     var itemNavSeleccionado by remember { mutableStateOf("Home") }
+
+    // Productos que vienen del backend
+    val productos by viewModel.productos.collectAsState()
+
+    // Cargar productos una sola vez cuando se entra a esta pantalla
+    LaunchedEffect(Unit) {
+        viewModel.cargarProductos()
+    }
+
+    // Filtrar por categoría según la pestaña
+    val productosFiltrados = when (tabSeleccionada) {
+        0 -> productos.filter { it.categoria.equals("MAQUILLAJE", ignoreCase = true) }
+        else -> productos.filter { it.categoria.equals("SKINCARE", ignoreCase = true) }
+    }
 
     Scaffold(
         topBar = { TopBarPrincipal(viewModel = viewModel) },
@@ -70,18 +80,11 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
                 onTabSelected = { tabSeleccionada = it }
             )
 
-            if (tabSeleccionada == 0) {
-                ContenidoBelleza(viewModel = viewModel)
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(500.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Contenido de Skincare")
-                }
-            }
+            ContenidoBelleza(
+                viewModel = viewModel,
+                productos = productosFiltrados,
+                tabSeleccionada = tabSeleccionada
+            )
         }
     }
 }
@@ -110,7 +113,7 @@ private fun TopBarPrincipal(viewModel: MainViewModel) {
                 // Dirección
                 Column(
                     modifier = Modifier.clickable {
-                        viewModel.navigateTo(Screen.Stores)// acción al hacer click en la dirección
+                        viewModel.navigateTo(Screen.Stores) // acción al hacer click en la dirección
                     }
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -130,7 +133,6 @@ private fun TopBarPrincipal(viewModel: MainViewModel) {
                 }
             }
         },
-        // Iconos a la derecha
         actions = {
             IconButton(onClick = { /* Acción de búsqueda */ }) {
                 Icon(
@@ -194,7 +196,6 @@ private fun TabsBelleza(tabSeleccionada: Int, onTabSelected: (Int) -> Unit) {
                         } else {
                             MaterialTheme.typography.titleSmall
                         },
-                        // Color negro si está seleccionado, gris si no
                         color = if (tabSeleccionada == index) Color.Black else Color.Gray
                     )
                 }
@@ -203,9 +204,14 @@ private fun TabsBelleza(tabSeleccionada: Int, onTabSelected: (Int) -> Unit) {
     }
 }
 
-// PESTAÑA \"BELLEZA\"
+// CONTENIDO SEGÚN LA PESTAÑA (BELLEZA / SKINCARE)
+
 @Composable
-private fun ContenidoBelleza(viewModel: MainViewModel) {
+private fun ContenidoBelleza(
+    viewModel: MainViewModel,
+    productos: List<Producto>,
+    tabSeleccionada: Int
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -236,10 +242,10 @@ private fun ContenidoBelleza(viewModel: MainViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "DESCUENTOS NYX",
+                    text = if (tabSeleccionada == 0) "DESCUENTOS MAQUILLAJE" else "DESCUENTOS SKINCARE",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    letterSpacing = 2.sp // Espaciado de letras
+                    letterSpacing = 2.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -252,81 +258,85 @@ private fun ContenidoBelleza(viewModel: MainViewModel) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Productos
-        Row(
+        // Título de la sección de productos
+        Text(
+            text = if (tabSeleccionada == 0) "Productos de Maquillaje" else "Productos de Skincare",
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            ProductoItem(
-                imagenId = R.drawable.kiko_milano_gloss,
-                marca = "KIKO MILANO",
-                nombre = "3D Hydra Gloss",
-                precio = "$15.990",
-                viewModel = viewModel
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (productos.isEmpty()) {
+            Text(
+                text = "Cargando productos...",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(16.dp)
             )
-            ProductoItem(
-                imagenId = R.drawable.nyx_epic_ink,
-                marca = "Nyx Cosmetics",
-                nombre = "Delineador de Ojos",
-                precio = "$9.950",
-                viewModel = viewModel
-            )
-            ProductoItem(
-                imagenId = R.drawable.tinta_essence,
-                marca = "Escensse",
-                nombre = "What A Tint!",
-                precio = "$10.990",
-                viewModel = viewModel
-            )
+        } else {
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(productos) { producto ->
+                    ProductoBackendItem(
+                        producto = producto,
+                        viewModel = viewModel
+                    )
+                }
+            }
         }
+
         Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
 @Composable
-private fun ProductoItem(
-    imagenId: Int,
-    marca: String,
-    nombre: String,
-    precio: String,
-    viewModel: MainViewModel // 4. Aceptar viewModel
+private fun ProductoBackendItem(
+    producto: Producto,
+    viewModel: MainViewModel
 ) {
-    Column(
+    Card(
         modifier = Modifier
-            .width(150.dp)
-            .clickable { viewModel.navigateTo(Screen.ProductDetail) }
-
+            .width(180.dp)
+            .clickable {
+                viewModel.navigateTo(Screen.ProductDetail)
+            },
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Image(
-            painter = painterResource(id = imagenId),
-            contentDescription = nombre,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.Crop
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = marca,
-            style = MaterialTheme.typography.labelMedium,
-            color = Color.Gray
-        )
-        Text(
-            text = nombre,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1 // Solo una línea
-        )
-        Text(
-            text = precio,
-            style = MaterialTheme.typography.bodyMedium,
-        )
+                .padding(12.dp)
+        ) {
+            Text(
+                text = producto.nombre,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Categoría: ${producto.categoria}",
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.Gray
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Precio: $${producto.precio}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }
+
+// NAV BAR INFERIOR
 
 @Composable
 private fun BottomNavBarPrincipal(
@@ -337,10 +347,9 @@ private fun BottomNavBarPrincipal(
         containerColor = RosaFondoNav,
         tonalElevation = 4.dp
     ) {
-        // Home
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
-            onClick = { viewModel.navigateTo(Screen.MainScreen)  },
+            onClick = { viewModel.navigateTo(Screen.MainScreen) },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
@@ -353,13 +362,12 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // Perfil
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
             onClick = { viewModel.navigateTo(Screen.Profile) },
             icon = {
                 Icon(
-                    imageVector = Icons.Outlined.Person ,
+                    imageVector = Icons.Outlined.Person,
                     contentDescription = "Perfil",
                     modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
                 )
@@ -370,7 +378,6 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // Favoritos
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
             onClick = { viewModel.navigateTo(Screen.Favorites) },
