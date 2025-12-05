@@ -13,9 +13,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val productoRepository: ProductoRepository = ProductoRepository()
+) : ViewModel() {
 
-    // ---------- Navegación ----------
+    // ---------- NAVEGACIÓN ----------
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
     val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
 
@@ -31,23 +33,11 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    // ---------- Productos (backend) ----------
-    private val productoRepository = ProductoRepository()
 
-    // Estado interno mutable
+    // ---------- LISTA DE PRODUCTOS DEL BACKEND ----------
     private val _productos = MutableStateFlow<List<Producto>>(emptyList())
-
-    // Estado expuesto solo-lectura a las pantallas
     val productos: StateFlow<List<Producto>> = _productos
 
-    // arriba de cargarProductos()
-    private val _productoSeleccionado = MutableStateFlow<Producto?>(null)
-    val productoSeleccionado: StateFlow<Producto?> = _productoSeleccionado
-
-    fun seleccionarProducto(producto: Producto) {
-        _productoSeleccionado.value = producto
-    }
-    // Llama al backend (GET /api/productos) y actualiza el estado.
     fun cargarProductos() {
         viewModelScope.launch {
             try {
@@ -61,4 +51,14 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
+
+    // ---------- PRODUCTO SELECCIONADO PARA DETALLE ----------
+    private val _productoSeleccionado = MutableStateFlow<Producto?>(null)
+    val productoSeleccionado: StateFlow<Producto?> = _productoSeleccionado
+
+    fun seleccionarProducto(producto: Producto) {
+        _productoSeleccionado.value = producto
+    }
 }
+

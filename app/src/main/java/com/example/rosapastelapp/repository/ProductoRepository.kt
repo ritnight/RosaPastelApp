@@ -1,13 +1,17 @@
+// com.example.rosapastelapp.repository.ProductoRepository
+
 package com.example.rosapastelapp.repository
 
 import com.example.rosapastelapp.data.model.Producto
+import com.example.rosapastelapp.data.remote.ApiService
 import com.example.rosapastelapp.data.remote.RetrofitInstance
 
-// Capa que se encarga de hablar con la API para todo lo relacionado a productos
-class ProductoRepository {
+class ProductoRepository(
+    private val api: ApiService = RetrofitInstance.api   // 👈 default = igual que ahora
+) {
 
-    // Llama al endpoint GET /api/productos del backend
     suspend fun getProductos(): List<Producto> {
-        return RetrofitInstance.api.getProductos()
+        return api.getProductos()
     }
 }
+
