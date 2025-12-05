@@ -5,14 +5,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "192.168.100.3:8080/api/"
+    private const val BASE_URL = "http://192.168.100.3:8080/api/"
 
 
     val api: ApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)                          // URL base de tu backend
-            .addConverterFactory(GsonConverterFactory.create()) // convierte JSON a data class
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ApiService::class.java)             // genera la implementación de ApiService
+            .create(ApiService::class.java)
     }
 }

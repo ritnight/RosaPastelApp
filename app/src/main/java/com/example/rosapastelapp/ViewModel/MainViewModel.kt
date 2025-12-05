@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
+    // ---------- Navegación ----------
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
     val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
 
@@ -30,22 +31,25 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    // ---------- Productos (backend) ----------
     private val productoRepository = ProductoRepository()
 
     // Estado interno mutable
     private val _productos = MutableStateFlow<List<Producto>>(emptyList())
+
     // Estado expuesto solo-lectura a las pantallas
     val productos: StateFlow<List<Producto>> = _productos
 
-
-    //llama al backend (GET /api/productos) y actualiza el estado.
-
+    // Llama al backend (GET /api/productos) y actualiza el estado.
     fun cargarProductos() {
         viewModelScope.launch {
             try {
                 val lista = productoRepository.getProductos()
+                println("DEBUG getProductos: recibidos = ${lista.size}")
                 _productos.value = lista
             } catch (e: Exception) {
+                println("ERROR getProductos: ${e.message}")
+                e.printStackTrace()
                 _productos.value = emptyList()
             }
         }

@@ -35,6 +35,8 @@ import com.example.rosapastelapp.data.model.Producto
 import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 import com.example.rosapastelapp.viewmodel.MainViewModel
+import coil.compose.AsyncImage
+
 
 val RosaPastelBanner = Color(0xFFE5A6B6)
 val GrisClaroBanner = Color(0xFFF0F0F0)
@@ -42,6 +44,7 @@ val RosaFondoNav = Color(0xFFFBEFF2)
 
 @Composable
 fun PantallaPrincipal(viewModel: MainViewModel) {
+
     var tabSeleccionada by remember { mutableStateOf(0) }
     var itemNavSeleccionado by remember { mutableStateOf("Home") }
 
@@ -64,7 +67,8 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
         bottomBar = {
             BottomNavBarPrincipal(
                 viewModel = viewModel,
-                itemSeleccionado = itemNavSeleccionado
+                itemSeleccionado = itemNavSeleccionado,
+                onItemSeleccionado = { itemNavSeleccionado = it }
             )
         }
     ) { paddingValues ->
@@ -75,6 +79,7 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
                 .verticalScroll(rememberScrollState())
         ) {
             PromoBanner()
+
             TabsBelleza(
                 tabSeleccionada = tabSeleccionada,
                 onTabSelected = { tabSeleccionada = it }
@@ -90,7 +95,6 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
 }
 
 // BARRA SUPERIOR
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBarPrincipal(viewModel: MainViewModel) {
@@ -113,7 +117,7 @@ private fun TopBarPrincipal(viewModel: MainViewModel) {
                 // Dirección
                 Column(
                     modifier = Modifier.clickable {
-                        viewModel.navigateTo(Screen.Stores) // acción al hacer click en la dirección
+                        viewModel.navigateTo(Screen.Stores)
                     }
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -153,7 +157,6 @@ private fun TopBarPrincipal(viewModel: MainViewModel) {
 }
 
 // BANNER DE PROMOCIÓN
-
 @Composable
 private fun PromoBanner() {
     Surface(
@@ -171,7 +174,6 @@ private fun PromoBanner() {
 }
 
 // BELLEZA / SKINCARE
-
 @Composable
 private fun TabsBelleza(tabSeleccionada: Int, onTabSelected: (Int) -> Unit) {
     val tabs = listOf("BELLEZA", "SKINCARE")
@@ -205,7 +207,6 @@ private fun TabsBelleza(tabSeleccionada: Int, onTabSelected: (Int) -> Unit) {
 }
 
 // CONTENIDO SEGÚN LA PESTAÑA (BELLEZA / SKINCARE)
-
 @Composable
 private fun ContenidoBelleza(
     viewModel: MainViewModel,
@@ -272,7 +273,7 @@ private fun ContenidoBelleza(
 
         if (productos.isEmpty()) {
             Text(
-                text = "Cargando productos...",
+                text = "Cargando productos o no hay productos para esta categoría.",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(16.dp)
             )
@@ -304,9 +305,7 @@ private fun ProductoBackendItem(
     Card(
         modifier = Modifier
             .width(180.dp)
-            .clickable {
-                viewModel.navigateTo(Screen.ProductDetail)
-            },
+            .clickable { viewModel.navigateTo(Screen.ProductDetail) },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -315,19 +314,31 @@ private fun ProductoBackendItem(
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
+
+            // IMAGEN DEL PRODUCTO DESDE imagenUrl
+            AsyncImage(
+                model = producto.imagenUrl,
+                contentDescription = producto.nombre,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // NOMBRE
             Text(
                 text = producto.nombre,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1
             )
+
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Categoría: ${producto.categoria}",
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(4.dp))
+
+            // PRECIO
             Text(
                 text = "Precio: $${producto.precio}",
                 style = MaterialTheme.typography.bodyMedium
@@ -336,12 +347,13 @@ private fun ProductoBackendItem(
     }
 }
 
-// NAV BAR INFERIOR
 
+// NAV BAR INFERIOR
 @Composable
 private fun BottomNavBarPrincipal(
     viewModel: MainViewModel,
-    itemSeleccionado: String
+    itemSeleccionado: String,
+    onItemSeleccionado: (String) -> Unit
 ) {
     NavigationBar(
         containerColor = RosaFondoNav,
@@ -349,7 +361,10 @@ private fun BottomNavBarPrincipal(
     ) {
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
-            onClick = { viewModel.navigateTo(Screen.MainScreen) },
+            onClick = {
+                onItemSeleccionado("Home")
+                viewModel.navigateTo(Screen.MainScreen)
+            },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
@@ -364,7 +379,10 @@ private fun BottomNavBarPrincipal(
         )
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
-            onClick = { viewModel.navigateTo(Screen.Profile) },
+            onClick = {
+                onItemSeleccionado("Profile")
+                viewModel.navigateTo(Screen.Profile)
+            },
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.Person,
@@ -380,7 +398,10 @@ private fun BottomNavBarPrincipal(
         )
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
-            onClick = { viewModel.navigateTo(Screen.Favorites) },
+            onClick = {
+                onItemSeleccionado("Favorites")
+                viewModel.navigateTo(Screen.Favorites)
+            },
             icon = {
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,
