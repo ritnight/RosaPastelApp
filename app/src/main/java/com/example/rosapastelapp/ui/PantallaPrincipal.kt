@@ -3,8 +3,6 @@ package com.example.rosapastelapp.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -15,9 +13,29 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,13 +48,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.rosapastelapp.R
 import com.example.rosapastelapp.data.model.Producto
 import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
 import com.example.rosapastelapp.viewmodel.MainViewModel
-import coil.compose.AsyncImage
-
 
 val RosaPastelBanner = Color(0xFFE5A6B6)
 val GrisClaroBanner = Color(0xFFF0F0F0)
@@ -44,14 +61,11 @@ val RosaFondoNav = Color(0xFFFBEFF2)
 
 @Composable
 fun PantallaPrincipal(viewModel: MainViewModel) {
-
     var tabSeleccionada by remember { mutableStateOf(0) }
     var itemNavSeleccionado by remember { mutableStateOf("Home") }
 
-    // Productos que vienen del backend
     val productos by viewModel.productos.collectAsState()
 
-    // Cargar productos una sola vez cuando se entra a esta pantalla
     LaunchedEffect(Unit) {
         viewModel.cargarProductos()
     }
@@ -76,15 +90,13 @@ fun PantallaPrincipal(viewModel: MainViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()) // scroll en toda la pantalla
         ) {
             PromoBanner()
-
             TabsBelleza(
                 tabSeleccionada = tabSeleccionada,
                 onTabSelected = { tabSeleccionada = it }
             )
-
             ContenidoBelleza(
                 viewModel = viewModel,
                 productos = productosFiltrados,
@@ -177,7 +189,6 @@ private fun PromoBanner() {
 @Composable
 private fun TabsBelleza(tabSeleccionada: Int, onTabSelected: (Int) -> Unit) {
     val tabs = listOf("BELLEZA", "SKINCARE")
-
     TabRow(
         selectedTabIndex = tabSeleccionada,
         containerColor = MaterialTheme.colorScheme.surface,
@@ -228,7 +239,7 @@ private fun ContenidoBelleza(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Descuentos
+        // Card de descuentos
         Card(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = GrisClaroBanner),
@@ -243,7 +254,10 @@ private fun ContenidoBelleza(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = if (tabSeleccionada == 0) "DESCUENTOS MAQUILLAJE" else "DESCUENTOS SKINCARE",
+                    text = if (tabSeleccionada == 0)
+                        "DESCUENTOS MAQUILLAJE"
+                    else
+                        "DESCUENTOS SKINCARE",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 2.sp
@@ -261,7 +275,10 @@ private fun ContenidoBelleza(
 
         // Título de la sección de productos
         Text(
-            text = if (tabSeleccionada == 0) "Productos de Maquillaje" else "Productos de Skincare",
+            text = if (tabSeleccionada == 0)
+                "Productos de Maquillaje"
+            else
+                "Productos de Skincare",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .fillMaxWidth()
@@ -278,17 +295,29 @@ private fun ContenidoBelleza(
                 modifier = Modifier.padding(16.dp)
             )
         } else {
-            LazyRow(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(productos) { producto ->
-                    ProductoBackendItem(
-                        producto = producto,
-                        viewModel = viewModel
-                    )
+                productos.chunked(2).forEach { fila ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        fila.forEach { producto ->
+                            Box(modifier = Modifier.weight(1f)) {
+                                ProductoBackendItem(
+                                    producto = producto,
+                                    viewModel = viewModel
+                                )
+                            }
+                        }
+                        if (fila.size == 1) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
                 }
             }
         }
@@ -304,9 +333,11 @@ private fun ProductoBackendItem(
 ) {
     Card(
         modifier = Modifier
-            .width(180.dp)
-            .clickable {viewModel.seleccionarProducto(producto)
-                        viewModel.navigateTo(Screen.ProductDetail) },
+            .fillMaxWidth()
+            .clickable {
+                viewModel.seleccionarProducto(producto)
+                viewModel.navigateTo(Screen.ProductDetail)
+            },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -315,8 +346,7 @@ private fun ProductoBackendItem(
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-
-            // IMAGEN DEL PRODUCTO DESDE imagenUrl
+            // Imagen desde imagenUrl
             AsyncImage(
                 model = producto.imagenUrl,
                 contentDescription = producto.nombre,
@@ -329,7 +359,7 @@ private fun ProductoBackendItem(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // NOMBRE
+            // Nombre
             Text(
                 text = producto.nombre,
                 style = MaterialTheme.typography.bodyMedium,
@@ -339,7 +369,7 @@ private fun ProductoBackendItem(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // PRECIO
+            // Precio
             Text(
                 text = "Precio: $${producto.precio}",
                 style = MaterialTheme.typography.bodyMedium
@@ -347,7 +377,6 @@ private fun ProductoBackendItem(
         }
     }
 }
-
 
 // NAV BAR INFERIOR
 @Composable
@@ -370,7 +399,9 @@ private fun BottomNavBarPrincipal(
                 Icon(
                     imageVector = Icons.Default.Home,
                     contentDescription = "Inicio",
-                    modifier = Modifier.size(if (itemSeleccionado == "Home") 36.dp else 28.dp)
+                    modifier = Modifier.size(
+                        if (itemSeleccionado == "Home") 36.dp else 28.dp
+                    )
                 )
             },
             colors = NavigationBarItemDefaults.colors(
@@ -388,7 +419,9 @@ private fun BottomNavBarPrincipal(
                 Icon(
                     imageVector = Icons.Outlined.Person,
                     contentDescription = "Perfil",
-                    modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
+                    modifier = Modifier.size(
+                        if (itemSeleccionado == "Profile") 36.dp else 28.dp
+                    )
                 )
             },
             colors = NavigationBarItemDefaults.colors(
@@ -407,7 +440,9 @@ private fun BottomNavBarPrincipal(
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,
                     contentDescription = "Favoritos",
-                    modifier = Modifier.size(if (itemSeleccionado == "Favorites") 36.dp else 28.dp)
+                    modifier = Modifier.size(
+                        if (itemSeleccionado == "Favorites") 36.dp else 28.dp
+                    )
                 )
             },
             colors = NavigationBarItemDefaults.colors(
