@@ -1,6 +1,5 @@
 package com.example.rosapastelapp.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,14 +8,28 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,46 +38,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.rosapastelapp.R
+import coil.compose.AsyncImage
+import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.NewYorkPink
-import com.example.rosapastelapp.ui.theme.BabyPink
 import com.example.rosapastelapp.ui.theme.RosaPastelAppTheme
+import com.example.rosapastelapp.viewmodel.CartItem
 import com.example.rosapastelapp.viewmodel.MainViewModel
-import com.example.rosapastelapp.navigation.Screen
 
-data class CartProduct(
-    val id: Int,
-    val name: String,
-    val description: String,
-    val price: String,
-    val imageRes: Int
-)
+//  TOP BAR
 
-val dummyCartList = listOf(
-    CartProduct(1, "Corrector True SKIN HIGH COVER", "¡No hay nada más multifacético...", "$5.990", R.drawable.corrector),
-    CartProduct(2, "Tinte Para Labios Y Mejillas What A Tint!", "Este tinte de labios y mejillas...", "$4.990", R.drawable.tinta_essence),
-    CartProduct(3, "Iluminador More Than Glow", "La textura sedosa, ultra suave...", "$5.990", R.drawable.iluminador),
-    CartProduct(4, "Ampolla Calmante Centella 100Ml", "SKIN1004 utiliza el poder...", "$29.990", R.drawable.ampolla)
-)
-
-
-// BARRA SUPERIOR (TOP BAR)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartTopBar(viewModel: MainViewModel) {
     CenterAlignedTopAppBar(
         title = {
-            Text("Carrito de Compras", fontWeight = FontWeight.Bold, color = Cordovan)
+            Text(
+                "Carrito de Compras",
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                color = Cordovan
+            )
         },
         navigationIcon = {
-            IconButton(onClick = {viewModel.navigateTo(Screen.MainScreen) }) {
+            IconButton(onClick = { viewModel.navigateTo(Screen.MainScreen) }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Volver",
@@ -78,8 +77,8 @@ fun CartTopBar(viewModel: MainViewModel) {
     )
 }
 
+//  BARRA DE TOTAL / PAGAR
 
-// BARRA INFERIOR (CHECKOUT
 @Composable
 fun CartCheckoutBar(total: String) {
     Row(
@@ -91,26 +90,51 @@ fun CartCheckoutBar(total: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            Text("Total:", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
-            Text(total, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = Cordovan)
+            Text(
+                "Total:",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
+            )
+            Text(
+                total,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold
+                ),
+                color = Cordovan
+            )
         }
 
         Button(
-            onClick = { /* Acción de Checkout */ },
-            modifier = Modifier.height(50.dp).weight(1f).padding(start = 16.dp),
+            onClick = { /* TODO: acción de checkout */ },
+            modifier = Modifier
+                .height(50.dp)
+                .weight(1f)
+                .padding(start = 16.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = NewYorkPink)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = NewYorkPink
+            )
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.ShoppingCart, contentDescription = "Pagar", modifier = Modifier.size(20.dp).padding(end = 4.dp))
-                Text("Pagar Ahora", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold))
+                Icon(
+                    Icons.Default.ShoppingCart,
+                    contentDescription = "Pagar",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .padding(end = 4.dp)
+                )
+                Text(
+                    "Pagar Ahora",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
+                    )
+                )
             }
         }
     }
 }
 
-
-// BARRA DE NAVEGACIÓN INFERIOR (COMPARTIDA)
+// NAV BAR INFERIOR COMPARTIDA
 
 @Composable
 private fun BottomNavBarPrincipal(
@@ -121,15 +145,17 @@ private fun BottomNavBarPrincipal(
         containerColor = RosaFondoNav,
         tonalElevation = 4.dp
     ) {
-        // home
+        // Home
         NavigationBarItem(
             selected = itemSeleccionado == "Home",
-            onClick = { viewModel.navigateTo(Screen.MainScreen)  },
+            onClick = { viewModel.navigateTo(Screen.MainScreen) },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
                     contentDescription = "Inicio",
-                    modifier = Modifier.size(if (itemSeleccionado == "Home") 36.dp else 28.dp)
+                    modifier = Modifier.size(
+                        if (itemSeleccionado == "Home") 36.dp else 28.dp
+                    )
                 )
             },
             colors = NavigationBarItemDefaults.colors(
@@ -138,15 +164,18 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // perfil
+
+        // Perfil
         NavigationBarItem(
             selected = itemSeleccionado == "Profile",
             onClick = { viewModel.navigateTo(Screen.Profile) },
             icon = {
                 Icon(
-                    imageVector = Icons.Filled.Person,
+                    imageVector = Icons.Default.Person,
                     contentDescription = "Perfil",
-                    modifier = Modifier.size(if (itemSeleccionado == "Profile") 36.dp else 28.dp)
+                    modifier = Modifier.size(
+                        if (itemSeleccionado == "Profile") 36.dp else 28.dp
+                    )
                 )
             },
             colors = NavigationBarItemDefaults.colors(
@@ -155,15 +184,18 @@ private fun BottomNavBarPrincipal(
                 indicatorColor = Color.Transparent
             )
         )
-        // favoritos
+
+        // Favoritos
         NavigationBarItem(
             selected = itemSeleccionado == "Favorites",
             onClick = { viewModel.navigateTo(Screen.Favorites) },
             icon = {
                 Icon(
-                    imageVector = Icons.Filled.FavoriteBorder,
+                    imageVector = Icons.Default.FavoriteBorder,
                     contentDescription = "Favoritos",
-                    modifier = Modifier.size(if (itemSeleccionado == "Favorites") 36.dp else 28.dp)
+                    modifier = Modifier.size(
+                        if (itemSeleccionado == "Favorites") 36.dp else 28.dp
+                    )
                 )
             },
             colors = NavigationBarItemDefaults.colors(
@@ -175,19 +207,27 @@ private fun BottomNavBarPrincipal(
     }
 }
 
-//pantalla principal de carrito
+//  PANTALLA PRINCIPAL DEL CARRITO
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Carrito(viewModel: MainViewModel) {
-    // Variable de estado para el Bottom Bar
-    var itemNavSeleccionado by remember { mutableStateOf("Cart") } // Asumimos un estado 'Cart'
+    var itemNavSeleccionado by remember { mutableStateOf("Cart") }
+
+    // Carrito real desde el ViewModel
+    val carrito by viewModel.carrito.collectAsState()
+
+    // Total = suma de precio * cantidad
+    val total = carrito.sumOf {
+        (it.producto.precio.toString().toDoubleOrNull() ?: 0.0) * it.cantidad
+    }
+    val totalTexto = "$${"%,.0f".format(total)}"
 
     Scaffold(
         topBar = { CartTopBar(viewModel = viewModel) },
         bottomBar = {
-            // COMIENZA BOTTOM BAR
             Column {
-                CartCheckoutBar(total = "$46.870")
+                CartCheckoutBar(total = totalTexto)
                 BottomNavBarPrincipal(
                     viewModel = viewModel,
                     itemSeleccionado = itemNavSeleccionado
@@ -195,8 +235,6 @@ fun Carrito(viewModel: MainViewModel) {
             }
         }
     ) { innerPadding ->
-
-        // Columna perezosa (LazyColumn) para la lista de productos
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
@@ -205,96 +243,163 @@ fun Carrito(viewModel: MainViewModel) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(vertical = 16.dp)
         ) {
-            items(dummyCartList) { product ->
-                CartItem(product = product)
+            items(carrito) { item ->
+                CartItemRow(
+                    item = item,
+                    onIncrement = {
+                        viewModel.actualizarCantidad(
+                            productoId = (item.producto.id ?: 0L).toInt(),
+                            nuevaCantidad = item.cantidad + 1
+                        )
+                    },
+                    onDecrement = {
+                        if (item.cantidad > 1) {
+                            viewModel.actualizarCantidad(
+                                productoId = (item.producto.id ?: 0L).toInt(),
+                                nuevaCantidad = item.cantidad - 1
+                            )
+                        }
+                    },
+                    onDelete = {
+                        viewModel.eliminarDelCarrito((item.producto.id ?: 0L).toInt())
+                    }
+                )
             }
         }
     }
 }
 
+//  ITEM DE LA LISTA DEL CARRITO
 
-// --- Componentes Individuales ---
 @Composable
-fun CartItem(product: CartProduct) {
+fun CartItemRow(
+    item: CartItem,
+    onIncrement: () -> Unit,
+    onDecrement: () -> Unit,
+    onDelete: () -> Unit
+) {
+    val producto = item.producto
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top
     ) {
-        // Columna 1: Imagen y Selector de Cantidad
+        // Columna 1: imagen + cantidad
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(0.25f)
         ) {
-            Image(
-                painter = painterResource(id = product.imageRes),
-                contentDescription = product.name,
+            AsyncImage(
+                model = producto.imagenUrl,
+                contentDescription = producto.nombre,
                 modifier = Modifier
                     .size(80.dp)
                     .background(Color.White),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            QuantitySelectorCart()
+            QuantitySelectorCart(
+                quantity = item.cantidad,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement
+            )
         }
 
-        // Columna 2: Título y Descripción
+        // Columna 2: nombre + descripción
         Column(
             modifier = Modifier
                 .weight(0.5f)
                 .padding(horizontal = 8.dp)
         ) {
-            Text(product.name, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold), fontSize = 15.sp, color = Cordovan)
+            Text(
+                text = producto.nombre,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                ),
+                fontSize = 15.sp,
+                color = Cordovan
+            )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(product.description, style = MaterialTheme.typography.bodySmall, color = Color.Gray, fontSize = 13.sp)
+            Text(
+                text = producto.descripcion,
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Gray,
+                fontSize = 13.sp
+            )
         }
 
-        // Columna 3: Eliminar y Precio
+        // Columna 3: eliminar + precio
         Column(
             horizontalAlignment = Alignment.End,
-            modifier = Modifier.weight(0.25f).height(80.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .weight(0.25f)
+                .height(80.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Botón Eliminar
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable { /* Lógica Eliminar */ }
+                modifier = Modifier.clickable { onDelete() }
             ) {
                 Icon(
-                    imageVector = Icons.Default.Delete ,
+                    imageVector = Icons.Default.Delete,
                     contentDescription = "Eliminar",
                     modifier = Modifier.size(16.dp),
                     tint = Color.Gray
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text("Eliminar", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                Text(
+                    "Eliminar",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray
+                )
             }
 
-            // Precio
             Text(
-                product.price,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+                text = "$${producto.precio}",
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold
+                ),
                 color = Cordovan
             )
         }
     }
-    Divider(color = Color(0xFFF0F0F0), thickness = 1.dp, modifier = Modifier.padding(top = 16.dp))
+
+    Divider(
+        color = Color(0xFFF0F0F0),
+        thickness = 1.dp,
+        modifier = Modifier.padding(top = 16.dp)
+    )
 }
 
+//  SELECTOR DE CANTIDAD
+
 @Composable
-fun QuantitySelectorCart() {
+fun QuantitySelectorCart(
+    quantity: Int,
+    onIncrement: () -> Unit,
+    onDecrement: () -> Unit
+) {
     Row(
         modifier = Modifier
             .background(Color(0xFFF0F0F0), shape = RoundedCornerShape(4.dp))
             .padding(horizontal = 4.dp, vertical = 2.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("1", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 14.sp), color = Cordovan)
-        Icon(Icons.Default.ArrowDropDown, contentDescription = "Cambiar cantidad", modifier = Modifier.size(20.dp), tint = Cordovan)
+        TextButton(onClick = { if (quantity > 1) onDecrement() }) {
+            Text("-", color = Cordovan, fontSize = 14.sp)
+        }
+        Text(
+            quantity.toString(),
+            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 14.sp),
+            color = Cordovan
+        )
+        TextButton(onClick = { onIncrement() }) {
+            Text("+", color = Cordovan, fontSize = 14.sp)
+        }
     }
 }
 
-// --- PREVIEW ---
 @Preview(showBackground = true)
 @Composable
 fun CarritoScreenPreview() {

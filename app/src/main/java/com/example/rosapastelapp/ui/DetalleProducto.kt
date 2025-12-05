@@ -97,6 +97,7 @@ fun DetalleProducto(viewModel: MainViewModel) {
             // BOTÓN AÑADIR AL CARRITO
             Button(
                 onClick = {
+                    viewModel.agregarAlCarrito(producto, quantity)
                     Toast.makeText(
                         context,
                         "Añadido al carrito: ${producto.nombre} x$quantity",
@@ -107,18 +108,13 @@ fun DetalleProducto(viewModel: MainViewModel) {
                     .fillMaxWidth()
                     .height(50.dp)
                     .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = NewYorkPink
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = NewYorkPink)
             ) {
                 Text(
                     "Añadir al carrito",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    )
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
