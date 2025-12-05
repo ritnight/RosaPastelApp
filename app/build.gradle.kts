@@ -46,8 +46,16 @@ android {
             it.useJUnitPlatform()
         }
     }
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE*"
+            excludes += "META-INF/NOTICE*"
+            excludes += "META-INF/AL2.0"
+            excludes += "META-INF/LGPL2.1"
+            excludes += "META-INF/*.kotlin_module"
+        }
+    }
 }
-
 dependencies {
     // ANDROID & COMPOSE
 
@@ -85,12 +93,12 @@ dependencies {
     testImplementation(libs.junit)
 
     // TEST UNITARIOS — JUnit 5 COMPLETO
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.6")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.5")
 
     // KOTEST — Assertions + Runner
-    testImplementation("io.kotest:kotest-runner-junit5:5.8.6")
-    testImplementation("io.kotest:kotest-assertions-core:5.8.8")
-    testImplementation("io.kotest:kotest-property:5.8.8")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.7.2")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:5.7.2")
+    testImplementation("io.kotest:kotest-property-jvm:5.7.2")
 
     // MOCKK — Mocking
     testImplementation("io.mockk:mockk:1.13.10")
