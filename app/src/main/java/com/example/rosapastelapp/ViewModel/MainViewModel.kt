@@ -40,6 +40,13 @@ class MainViewModel : ViewModel() {
     // Estado expuesto solo-lectura a las pantallas
     val productos: StateFlow<List<Producto>> = _productos
 
+    // arriba de cargarProductos()
+    private val _productoSeleccionado = MutableStateFlow<Producto?>(null)
+    val productoSeleccionado: StateFlow<Producto?> = _productoSeleccionado
+
+    fun seleccionarProducto(producto: Producto) {
+        _productoSeleccionado.value = producto
+    }
     // Llama al backend (GET /api/productos) y actualiza el estado.
     fun cargarProductos() {
         viewModelScope.launch {

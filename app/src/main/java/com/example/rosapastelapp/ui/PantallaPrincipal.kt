@@ -305,7 +305,8 @@ private fun ProductoBackendItem(
     Card(
         modifier = Modifier
             .width(180.dp)
-            .clickable { viewModel.navigateTo(Screen.ProductDetail) },
+            .clickable {viewModel.seleccionarProducto(producto)
+                        viewModel.navigateTo(Screen.ProductDetail) },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {

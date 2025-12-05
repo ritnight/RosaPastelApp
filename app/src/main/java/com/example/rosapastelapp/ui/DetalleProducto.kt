@@ -1,10 +1,13 @@
 package com.example.rosapastelapp.ui
 
-import androidx.compose.foundation.Image
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -13,20 +16,20 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.rosapastelapp.R
+import coil.compose.AsyncImage
+import com.example.rosapastelapp.data.model.Producto
 import com.example.rosapastelapp.navigation.Screen
 import com.example.rosapastelapp.ui.theme.Cordovan
 import com.example.rosapastelapp.ui.theme.NewYorkPink
@@ -35,8 +38,25 @@ import com.example.rosapastelapp.viewmodel.MainViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetalleProducto(viewModel: MainViewModel) {
+    val context = LocalContext.current
+    val productoSeleccionado by viewModel.productoSeleccionado.collectAsState()
+
     var quantity by remember { mutableIntStateOf(1) }
-    var selectedColor by remember { mutableStateOf(Color(0xFF8B002B)) }
+
+    // Si no hay producto seleccionado (por ejemplo, se llegó directo)
+    if (productoSeleccionado == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("No se encontró el producto seleccionado")
+        }
+        return
+    }
+
+    val producto = productoSeleccionado!!
 
     Scaffold(
         topBar = { TopBarDetalleProducto(viewModel) },
@@ -51,26 +71,21 @@ fun DetalleProducto(viewModel: MainViewModel) {
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            ProductImageAndControls(
-                productImageRes = R.drawable.tinta_essence,
-                onBackClicked = { viewModel.navigateTo(Screen.MainScreen) }
-            )
+            ProductImageAndControls(producto = producto)
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ProductInfoSection(
-                title = "What a Tint!",
-                price = "$4.990",
-                brand = "ESSENCE"
+                title = producto.nombre,
+                price = "$${producto.precio}",
+                brand = producto.categoria,
+                description = producto.descripcion
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            ColorSelector(
-                selectedColor = selectedColor,
-                onColorSelected = { selectedColor = it }
-            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -79,17 +94,28 @@ fun DetalleProducto(viewModel: MainViewModel) {
                 onQuantityChange = { quantity = it }
             )
 
+            // BOTÓN AÑADIR AL CARRITO
             Button(
-                onClick = { /* acción futura */ },
+                onClick = {
+                    Toast.makeText(
+                        context,
+                        "Añadido al carrito: ${producto.nombre} x$quantity",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
                     .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = NewYorkPink)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = NewYorkPink
+                )
             ) {
                 Text(
                     "Añadir al carrito",
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
             }
 
@@ -112,85 +138,84 @@ private fun TopBarDetalleProducto(viewModel: MainViewModel) {
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent
+        )
     )
 }
 
 @Composable
-private fun ProductImageAndControls(
-    productImageRes: Int,
-    onBackClicked: () -> Unit
-) {
+private fun ProductImageAndControls(producto: Producto) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(350.dp)
+            .background(Color.White),
+        contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(id = productImageRes),
-            contentDescription = "Producto",
-            contentScale = ContentScale.Crop,
+        AsyncImage(
+            model = producto.imagenUrl,
+            contentDescription = producto.nombre,
             modifier = Modifier
-                .fillMaxWidth(0.55f)
-                .align(Alignment.CenterStart)
-                .fillMaxHeight()
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            contentScale = ContentScale.Fit
         )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.45f)
-                .align(Alignment.CenterEnd)
-                .fillMaxHeight()
-                .background(Color.White)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape)
-                    .background(NewYorkPink)
-                    .align(Alignment.Center),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "FOR\nLIPS &\nCHEEKS",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Black,
-                    modifier = Modifier.padding(16.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
 
         Icon(
             imageVector = Icons.Filled.FavoriteBorder,
             contentDescription = "Favorito",
             tint = Cordovan,
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(32.dp)
-                .size(40.dp)
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .size(32.dp)
         )
     }
 }
 
+
 @Composable
-fun ProductInfoSection(title: String, price: String, brand: String) {
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+fun ProductInfoSection(
+    title: String,
+    price: String,
+    brand: String,
+    description: String
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(title, style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold))
-            Text(price, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold))
+            Text(
+                title,
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            Text(
+                price,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
+    }
 
-        Text(brand, style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
+        Text(
+            brand,
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Gray
+        )
 
-        Row(modifier = Modifier.padding(vertical = 4.dp)) {
+        Row(
+            modifier = Modifier.padding(vertical = 4.dp)
+        ) {
             repeat(5) {
                 Icon(
-                    imageVector = Icons.Filled.Star, // Se usa imageVector en lugar de painter
+                    imageVector = Icons.Filled.Star,
                     contentDescription = null,
                     tint = Color(0xFFFFC107),
                     modifier = Modifier.size(20.dp)
@@ -198,46 +223,29 @@ fun ProductInfoSection(title: String, price: String, brand: String) {
             }
         }
 
+        Spacer(modifier = Modifier.height(8.dp))
+
         Text(
-            text = "Tinte para labios y mejillas. Su textura no pegajosa, similar al agua, proporciona un tono suave con un acabado natural.",
+            text = "Descripción:",
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold
+            )
+        )
+
+        Text(
+            text = if (description.isNotBlank()) description
+            else "Sin descripción disponible.",
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(top = 4.dp)
         )
     }
-}
+
 
 @Composable
-fun ColorSelector(selectedColor: Color, onColorSelected: (Color) -> Unit) {
-    val colors = listOf(Color(0xFF8B002B), Color(0xFFE91E63))
-
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Text("Color", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold))
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            colors.forEach { color ->
-                Box(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .clickable { onColorSelected(color) }
-                ) {
-                    if (color == selectedColor) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(CircleShape)
-                                .background(Color.White.copy(alpha = 0.4f))
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun QuantitySelector(quantity: Int, onQuantityChange: (Int) -> Unit) {
+fun QuantitySelector(
+    quantity: Int,
+    onQuantityChange: (Int) -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
