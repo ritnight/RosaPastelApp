@@ -2,7 +2,8 @@
 
 Aplicación móvil desarrollada en **Android Studio** utilizando **Kotlin** y **Jetpack Compose**.  
 Este proyecto forma parte del ramo **Desarrollo de Aplicaciones Móviles**.
-
+Enlace al repositorio del backend:
+-https://github.com/ritnight/RosaPastel-Backend
 ---
 
 ## 👩‍💻 Integrantes del equipo
